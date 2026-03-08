@@ -8,7 +8,7 @@
     <style>
         :root {
             --primary: #5b2bbf;
-            /* Very light mixed purple-white gradient for the background */
+            /* The modern light white-purple gradient you wanted */
             --bg-gradient: linear-gradient(135deg, #f8f0ff 0%, #ffffff 100%);
             --card: #ffffff;
             --border: #e2e8f0;
@@ -62,7 +62,7 @@
             font-size: 14px; background: #f8fafc; transition: all 0.25s ease; outline: none;
         }
 
-        input:focus, select:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(91, 43, 191, 0.1); }
+        input:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(91, 43, 191, 0.1); }
 
         .preview-side {
             flex: 1;
@@ -72,6 +72,7 @@
             align-items: center;
             justify-content: center;
             padding: 40px;
+            transition: background 0.4s ease;
         }
 
         .preview-side.dark-mode { background: #121212; }
@@ -205,7 +206,6 @@
 
         document.getElementById('scaleVal').innerText = Math.round(scale * 100);
 
-        // Proportional sizing logic
         const logoWidth = 145 * scale; 
         const nameSize = 20 * scale;
         const titleSize = 14 * scale;
@@ -215,7 +215,7 @@
         const logoUrl = "https://raw.githubusercontent.com/lidor1997/cevro-signature-generator/06d880fec1752804a8f64b013d5c7382455fc7eb/1763362497422%20(1).png";
         
         const phoneHtml = phone ? `
-            <tr><td style="padding-bottom: ${4 * scale}px; font-family: sans-serif; font-size: ${textSize}px; color: #334155;">
+            <tr><td style="padding-bottom: ${4 * scale}px; font-family: sans-serif; font-size: ${textSize}px; color: #334155; border: none;">
                 <span style="color: ${color}; font-weight: 800; font-size: ${textSize - 2}px; margin-right: 4px;">M:</span> ${prefix} ${phone}
             </td></tr>` : '';
 
@@ -225,23 +225,24 @@
             </a>` : '';
 
         const calendarBtn = calendar ? `
-            <tr><td style="padding-top: ${15 * scale}px;">
+            <tr><td style="padding-top: ${15 * scale}px; border: none;">
                 <a href="${calendar}" target="_blank" style="background-color: ${color}; color: #ffffff; padding: ${8 * scale}px ${18 * scale}px; text-decoration: none; border-radius: 6px; font-size: ${textSize - 1}px; font-weight: 700; display: inline-block;">Schedule a Call</a>
             </td></tr>` : '';
 
+        // Clean table structure to avoid "ghost lines"
         const template = `
-            <table cellpadding="0" cellspacing="0" style="vertical-align: middle; border-collapse: collapse !important; background-color: #ffffff;">
-                <tbody><tr>
-                    <td style="padding-right: ${padding}px; border-right: 2px solid ${color}; vertical-align: middle;">
-                        <img src="${logoUrl}" width="${logoWidth}" alt="Cevro" style="display: block; border: 0;">
+            <table cellpadding="0" cellspacing="0" border="0" style="vertical-align: middle; border-collapse: collapse !important; background-color: #ffffff; border: none; padding: 0; margin: 0;">
+                <tbody><tr style="border: none;">
+                    <td style="padding-right: ${padding}px; border-right: 2px solid ${color}; vertical-align: middle; border-top: none; border-bottom: none; border-left: none;">
+                        <img src="${logoUrl}" width="${logoWidth}" alt="Cevro" style="display: block; border: 0; pointer-events: none;">
                     </td>
-                    <td style="padding-left: ${padding}px; vertical-align: middle; white-space: nowrap;">
-                        <table cellpadding="0" cellspacing="0" style="border-collapse: collapse !important;">
+                    <td style="padding-left: ${padding}px; vertical-align: middle; white-space: nowrap; border: none;">
+                        <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse !important; border: none; padding: 0; margin: 0;">
                             <tbody>
-                                <tr><td style="font-family: sans-serif; font-weight: 700; color: #000; font-size: ${nameSize}px; line-height: 1.2; padding-bottom: 2px;">${name}</td></tr>
-                                <tr><td style="font-family: sans-serif; color: #64748b; font-weight: 500; font-size: ${titleSize}px; padding-bottom: ${12 * scale}px;">${title}</td></tr>
+                                <tr style="border: none;"><td style="font-family: sans-serif; font-weight: 700; color: #000000; font-size: ${nameSize}px; line-height: 1.2; padding-bottom: 2px; border: none;">${name}</td></tr>
+                                <tr style="border: none;"><td style="font-family: sans-serif; color: #64748b; font-weight: 500; font-size: ${titleSize}px; padding-bottom: ${12 * scale}px; border: none;">${title}</td></tr>
                                 ${phoneHtml}
-                                <tr><td style="padding-top: ${4 * scale}px; font-family: sans-serif; font-size: ${textSize}px;">
+                                <tr style="border: none;"><td style="padding-top: ${4 * scale}px; font-family: sans-serif; font-size: ${textSize}px; border: none;">
                                     <a href="https://www.cevro.ai" target="_blank" style="color: ${color}; text-decoration: none; font-weight: 700;">www.cevro.ai</a>
                                     ${linkedinIcon}
                                 </td></tr>
