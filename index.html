@@ -232,6 +232,7 @@
             </td>
         </tr>` : '';
 
+    // שימוש באפור כהה מאוד (#333333) למניעת היפוך צבעים באייפון
     const template = `
 <table cellpadding="0" cellspacing="0" border="0"
 style="
@@ -284,8 +285,8 @@ padding-bottom:2px;
 border:none!important;
 ">
 <span style="
-color:#010101!important;
--webkit-text-fill-color:#010101!important;
+color:#333333!important;
+-webkit-text-fill-color:#333333!important;
 text-decoration:none;
 ">
 ${name}
@@ -302,9 +303,8 @@ padding-bottom:${8 * scale}px;
 border:none!important;
 ">
 <span style="
-color:#010101!important;
--webkit-text-fill-color:#010101!important;
-opacity:0.8;
+color:#4b5563!important;
+-webkit-text-fill-color:#4b5563!important;
 ">
 ${title}
 </span>
