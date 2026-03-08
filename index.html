@@ -262,26 +262,44 @@
     }
 
     async function copyAsImage() {
+    const btn = document.querySelector('.copy-button');
+    const originalText = btn.innerText;
+    
+    try {
+        btn.innerText = "Processing...";
         const signatureElement = document.getElementById("signature-output");
         
-        // Convert the HTML signature to a Canvas
         const canvas = await html2canvas(signatureElement, {
-            useCORS: true,
-            backgroundColor: null,
-            scale: 2 // High resolution
+            useCORS: true, 
+            allowTaint: false,
+            backgroundColor: "#ffffff", // Forces white background for the image
+            scale: 2 
         });
 
-        // Convert Canvas to Blob
         canvas.toBlob(async (blob) => {
-            const item = new ClipboardItem({ "image/png": blob });
-            await navigator.clipboard.write([item]);
-            
-            // Show Toast
-            const toast = document.getElementById('toast');
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 4000);
-        });
+            try {
+                const item = new ClipboardItem({ "image/png": blob });
+                await navigator.clipboard.write([item]);
+                
+                // Show Success Toast
+                const toast = document.getElementById('toast');
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 4000);
+            } catch (err) {
+                console.error("Clipboard Error:", err);
+                alert("Clipboard access denied. Please use HTTPS or check browser permissions.");
+            } finally {
+                btn.innerText = originalText;
+            }
+        }, "image/png");
+
+    } catch (e) {
+        console.error("Image Generation Error:", e);
+        btn.innerText = originalText;
+        alert("Failed to generate image. Please ensure you are using a modern browser.");
     }
+}
+Recommendation for Lidor
 
     function toggleDarkMode() {
         const pane = document.getElementById('previewPane');
