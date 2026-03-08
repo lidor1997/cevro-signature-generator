@@ -5,78 +5,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cevro | Pro Signature Studio</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
             --primary: #5b2bbf;
-            --primary-soft: #f5f3ff;
-            --text-dark: #1e293b;
-            --text-light: #64748b;
+            --bg-gradient: linear-gradient(135deg, #f5f3ff 0%, #ffffff 100%);
+            --card: #ffffff;
             --border: #e2e8f0;
-            --success: #10b981;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #f8faff 0%, #ffffff 100%);
+            background: var(--bg-gradient);
+            background-attachment: fixed;
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            color: var(--text-dark);
         }
 
         .app-container {
             display: flex;
             width: 1200px;
             height: 850px;
-            background: #fff;
-            border-radius: 32px;
-            box-shadow: 0 50px 100px -20px rgba(91, 43, 191, 0.12);
+            background: var(--card);
+            border-radius: 30px;
+            box-shadow: 0 40px 100px -20px rgba(91, 43, 191, 0.15);
             overflow: hidden;
-            border: 1px solid var(--border);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             position: relative;
         }
 
-        /* Sidebar */
-        .sidebar {
-            width: 420px;
+        .editor-side {
+            width: 380px;
             padding: 40px;
             border-right: 1px solid var(--border);
             overflow-y: auto;
-            background: #fff;
+            background: rgba(255, 255, 255, 0.95);
         }
 
-        .logo-area h1 { font-size: 22px; margin: 0 0 35px 0; color: var(--primary); font-weight: 800; }
+        .logo-header { font-size: 24px; font-weight: 800; margin-bottom: 30px; color: var(--primary); letter-spacing: -1px; }
 
-        .step-container { margin-bottom: 30px; }
-        .step-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
-        .step-number { background: var(--primary-soft); color: var(--primary); width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
-        .step-title { font-size: 14px; font-weight: 700; text-transform: uppercase; color: var(--text-light); }
+        .section-label {
+            font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
+            color: var(--text-muted); margin: 30px 0 15px 0; display: block; border-bottom: 1px solid var(--border); padding-bottom: 8px;
+        }
 
-        .input-box { margin-bottom: 15px; }
-        label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
-        
+        .field { margin-bottom: 20px; }
+        label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #475569; }
+
         input, select {
             width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: 12px;
-            font-size: 14px; background: #f8fafc; outline: none; transition: 0.2s ease;
+            font-size: 14px; background: #f8fafc; outline: none;
         }
 
-        input:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(91, 43, 191, 0.08); }
+        .preview-side {
+            flex: 1;
+            background: #f1f5f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            transition: background 0.4s ease;
+        }
 
-        /* Preview Area */
-        .preview-pane { flex: 1; background: #f1f5f9; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; transition: background 0.4s ease; }
-        .preview-pane.dark-mode { background: #121212; }
+        .preview-side.dark-mode { background: #121212; }
 
-        .signature-card { background: white; padding: 50px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid transparent; }
+        /* The wrapper is now the "Capture Area" */
+        .signature-wrapper {
+            background: white;
+            padding: 45px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            max-width: 580px;
+            width: fit-content;
+        }
 
-        .actions { margin-top: 40px; display: flex; gap: 15px; }
-        .btn { padding: 18px 36px; border-radius: 18px; font-weight: 700; font-size: 16px; cursor: pointer; border: none; transition: 0.3s; }
-        .btn-primary { background: var(--primary); color: white; box-shadow: 0 10px 25px -5px rgba(91, 43, 191, 0.4); }
-        .btn-primary:hover { transform: translateY(-3px); }
-        .btn-secondary { background: #475569; color: white; }
-
-        /* Modern Toast Notification */
         #toast {
             position: absolute;
             bottom: -100px;
@@ -84,21 +92,27 @@
             transform: translateX(-50%);
             background: #1e293b;
             color: white;
-            padding: 20px 30px;
-            border-radius: 20px;
+            padding: 16px 24px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
-            gap: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            gap: 12px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             z-index: 1000;
             opacity: 0;
         }
-        #toast.show { bottom: 40px; opacity: 1; }
-        .toast-check { background: var(--success); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
 
-        input[type="range"] { width: 100%; height: 6px; background: #e2e8f0; border-radius: 10px; appearance: none; }
-        input[type="range"]::-webkit-slider-thumb { appearance: none; width: 20px; height: 20px; background: var(--primary); border: 4px solid white; border-radius: 50%; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+        #toast.show { bottom: 40px; opacity: 1; }
+        .toast-check { background: #10b981; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+
+        .controls { margin-top: 30px; display: flex; gap: 15px; }
+        .btn { border: none; padding: 16px 32px; border-radius: 16px; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        .copy-button { background: var(--primary); color: white; }
+        .dark-toggle { background: #475569; color: white; }
+
+        input[type="range"] { height: 6px; background: #e2e8f0; border-radius: 5px; appearance: none; cursor: pointer; }
+        input[type="range"]::-webkit-slider-thumb { appearance: none; width: 20px; height: 20px; background: var(--primary); border: 3px solid white; border-radius: 50%; }
     </style>
 </head>
 <body>
@@ -107,86 +121,80 @@
     <div id="toast">
         <div class="toast-check">✓</div>
         <div>
-            <div style="font-weight: 700; font-size: 14px;">Copied Successfully!</div>
-            <div style="font-size: 12px; color: #94a3b8;">Paste it in Gmail Signature settings.</div>
+            <div style="font-weight: 700; font-size: 14px;">Copied as Picture!</div>
+            <div style="font-size: 12px; color: #94a3b8;">It's now non-editable. Paste in Gmail.</div>
         </div>
     </div>
 
-    <div class="sidebar">
-        <div class="logo-area"><h1>Cevro Studio</h1></div>
+    <div class="editor-side">
+        <div class="logo-header">Cevro Studio</div>
 
-        <div class="step-container">
-            <div class="step-header"><div class="step-number">1</div><div class="step-title">Identity</div></div>
-            <div class="input-box"><label>Full Name</label><input type="text" id="name" placeholder="John Doe" oninput="generate()"></div>
-            <div class="input-box"><label>Job Title</label><input type="text" id="title" placeholder="Creative Director" oninput="generate()"></div>
+        <span class="section-label">Identity</span>
+        <div class="field"><label>Full Name</label><input type="text" id="name" placeholder="John Doe" oninput="generate()"></div>
+        <div class="field"><label>Job Title</label><input type="text" id="title" placeholder="Creative Director" oninput="generate()"></div>
+        <div class="field">
+            <label>Phone Number</label>
+            <div style="display:flex; gap:10px;">
+                <select id="prefix" onchange="generate()" style="width:115px;">
+                    <option value="+1" selected>US (+1)</option>
+                    <option value="+43">AT (+43)</option>
+                    <option value="+32">BE (+32)</option>
+                    <option value="+41">CH (+41)</option>
+                    <option value="+420">CZ (+420)</option>
+                    <option value="+49">DE (+49)</option>
+                    <option value="+45">DK (+45)</option>
+                    <option value="+34">ES (+34)</option>
+                    <option value="+358">FI (+358)</option>
+                    <option value="+33">FR (+33)</option>
+                    <option value="+30">GR (+30)</option>
+                    <option value="+36">HU (+36)</option>
+                    <option value="+353">IE (+353)</option>
+                    <option value="+972">IL (+972)</option>
+                    <option value="+39">IT (+39)</option>
+                    <option value="+31">NL (+31)</option>
+                    <option value="+47">NO (+47)</option>
+                    <option value="+48">PL (+48)</option>
+                    <option value="+351">PT (+351)</option>
+                    <option value="+40">RO (+40)</option>
+                    <option value="+381">RS (+381)</option>
+                    <option value="+46">SE (+46)</option>
+                    <option value="+44">UK (+44)</option>
+                </select>
+                <input type="text" id="phone" placeholder="50 000 000" oninput="generate()">
+            </div>
         </div>
 
-        <div class="step-container">
-            <div class="step-header"><div class="step-number">2</div><div class="step-title">Contact</div></div>
-            <div class="input-box">
-                <label>Phone Number</label>
-                <div style="display:flex; gap:8px;">
-                    <select id="prefix" onchange="generate()" style="width:110px;">
-                        <option value="+1" selected>US (+1)</option>
-                        <option value="+43">AT (+43)</option>
-                        <option value="+32">BE (+32)</option>
-                        <option value="+41">CH (+41)</option>
-                        <option value="+420">CZ (+420)</option>
-                        <option value="+49">DE (+49)</option>
-                        <option value="+45">DK (+45)</option>
-                        <option value="+34">ES (+34)</option>
-                        <option value="+358">FI (+358)</option>
-                        <option value="+33">FR (+33)</option>
-                        <option value="+30">GR (+30)</option>
-                        <option value="+36">HU (+36)</option>
-                        <option value="+353">IE (+353)</option>
-                        <option value="+972">IL (+972)</option>
-                        <option value="+39">IT (+39)</option>
-                        <option value="+31">NL (+31)</option>
-                        <option value="+47">NO (+47)</option>
-                        <option value="+48">PL (+48)</option>
-                        <option value="+351">PT (+351)</option>
-                        <option value="+40">RO (+40)</option>
-                        <option value="+381">RS (+381)</option>
-                        <option value="+46">SE (+46)</option>
-                        <option value="+44">UK (+44)</option>
-                    </select>
-                    <input type="text" id="phone" placeholder="50 000 000" oninput="generate()">
-                </div>
-            </div>
-            <div class="input-box"><label>LinkedIn URL</label><input type="text" id="linkedin" placeholder="LinkedIn link" oninput="generate()"></div>
-            <div class="input-box"><label>Calendar Link</label><input type="text" id="calendar" placeholder="Calendly link" oninput="generate()"></div>
-        </div>
+        <span class="section-label">Connections</span>
+        <div class="field"><label>LinkedIn URL</label><input type="text" id="linkedin" placeholder="LinkedIn profile link" oninput="generate()"></div>
+        <div class="field"><label>Meeting Link</label><input type="text" id="calendar" placeholder="Calendly or Meet link" oninput="generate()"></div>
 
-        <div class="step-container">
-            <div class="step-header"><div class="step-number">3</div><div class="step-title">Design</div></div>
-            <div class="input-box">
-                <label>Font Family</label>
-                <select id="fontFamily" onchange="generate()">
-                    <option value="'Inter', sans-serif">Inter (Modern)</option>
-                    <option value="'Calibri', 'Candara', sans-serif">Calibri (Classic)</option>
-                    <option value="Arial, sans-serif">Arial</option>
-                </select>
-            </div>
-            <div class="input-box">
-                <label>Accent Color</label>
-                <select id="accentColor" onchange="generate()">
-                    <option value="#5b2bbf">Cevro Purple</option>
-                    <option value="#000000">Cevro Black</option>
-                </select>
-            </div>
-            <div class="input-box">
-                <label>Global Scale: <span id="scaleVal">100</span>%</label>
-                <input type="range" id="globalScale" min="70" max="140" value="100" oninput="generate()">
-            </div>
+        <span class="section-label">Design & Scale</span>
+        <div class="field">
+            <label>Font Family</label>
+            <select id="fontFamily" onchange="generate()">
+                <option value="'Inter', sans-serif">Inter (Modern)</option>
+                <option value="'Calibri', 'Candara', sans-serif">Calibri (Business)</option>
+                <option value="Arial, sans-serif">Arial</option>
+            </select>
+        </div>
+        <div class="field">
+            <label>Accent Color</label>
+            <select id="accentColor" onchange="generate()">
+                <option value="#5b2bbf">Cevro Purple</option>
+                <option value="#000000">Cevro Black</option>
+            </select>
+        </div>
+        <div class="field">
+            <label>Global Scale: <span id="scaleVal">100</span>%</label>
+            <input type="range" id="globalScale" min="70" max="140" value="100" oninput="generate()">
         </div>
     </div>
 
-    <div class="preview-pane" id="previewPane">
-        <div id="signature-output" class="signature-card"></div>
-        <div class="actions">
-            <button class="btn btn-primary" onclick="copyToClipboard()">Copy Signature</button>
-            <button class="btn btn-secondary" onclick="toggleDarkMode()">Night Mode</button>
+    <div class="preview-side" id="previewPane">
+        <div id="signature-output" class="signature-wrapper"></div>
+        <div class="controls">
+            <button class="btn copy-button" onclick="copyAsImage()">Copy as Picture</button>
+            <button class="btn dark-toggle" onclick="toggleDarkMode()">Night Mode</button>
         </div>
     </div>
 </div>
@@ -201,11 +209,11 @@
         const calendar = document.getElementById('calendar').value;
         const color = document.getElementById('accentColor').value;
         const font = document.getElementById('fontFamily').value;
-        
         const scale = document.getElementById('globalScale').value / 100;
+
         document.getElementById('scaleVal').innerText = Math.round(scale * 100);
 
-        const logoWidth = 135 * scale; 
+        const logoWidth = 145 * scale; 
         const nameSize = 20 * scale;
         const titleSize = 14 * scale;
         const textSize = 13 * scale;
@@ -218,29 +226,29 @@
             </td></tr>` : '';
 
         const linkedinIcon = linkedin ? `
-            <a href="${linkedin}" target="_blank" style="text-decoration:none; margin-left: ${8 * scale}px; display: inline-block; vertical-align: middle;">
-                <img src="https://cdn-icons-png.flaticon.com/32/174/174857.png" width="${16 * scale}" height="${16 * scale}" style="display:block; border:0; pointer-events: none;">
-            </a>` : '';
+            <span style="margin-left: ${8 * scale}px; display: inline-block; vertical-align: middle;">
+                <img src="https://cdn-icons-png.flaticon.com/32/174/174857.png" width="${16 * scale}" height="${16 * scale}">
+            </span>` : '';
 
         const calendarBtn = calendar ? `
             <tr><td style="padding-top: ${15 * scale}px;">
-                <a href="${calendar}" target="_blank" style="background-color: ${color}; color: #ffffff; padding: ${8 * scale}px ${18 * scale}px; text-decoration: none; border-radius: ${6 * scale}px; font-size: ${textSize - 1}px; font-weight: 700; display: inline-block;">Schedule a Call</a>
+                <div style="background-color: ${color}; color: #ffffff; padding: ${8 * scale}px ${18 * scale}px; border-radius: 6px; font-size: ${textSize - 1}px; font-weight: 700; display: inline-block;">Schedule a Call</div>
             </td></tr>` : '';
 
         const template = `
-            <table cellpadding="0" cellspacing="0" border="0" style="vertical-align: middle; border-collapse: collapse !important; background-color: #ffffff;">
+            <table cellpadding="0" cellspacing="0" style="vertical-align: middle; border-collapse: collapse !important; background-color: #ffffff;">
                 <tbody><tr>
                     <td style="padding-right: ${25 * scale}px; border-right: 2px solid ${color}; vertical-align: middle;">
-                        <img src="${logoUrl}" width="${logoWidth}" alt="Cevro" style="display: block; border: 0; pointer-events: none; -webkit-user-drag: none;">
+                        <img src="${logoUrl}" width="${logoWidth}" crossorigin="anonymous" style="display: block; border: 0;">
                     </td>
                     <td style="padding-left: ${25 * scale}px; vertical-align: middle; white-space: nowrap;">
-                        <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse !important;">
+                        <table cellpadding="0" cellspacing="0" style="border-collapse: collapse !important;">
                             <tbody>
-                                <tr><td style="font-family: ${font}; font-weight: 700; color: #000; font-size: ${nameSize}px; line-height: 1.2; padding-bottom: 2px;">${name}</td></tr>
+                                <tr><td style="font-family: ${font}; font-weight: 700; color: #000; font-size: ${nameSize}px; padding-bottom: 2px;">${name}</td></tr>
                                 <tr><td style="font-family: ${font}; color: #64748b; font-weight: 500; font-size: ${titleSize}px; padding-bottom: ${12 * scale}px;">${title}</td></tr>
                                 ${phoneHtml}
                                 <tr><td style="padding-top: ${4 * scale}px; font-family: ${font}; font-size: ${textSize}px;">
-                                    <a href="https://www.cevro.ai" target="_blank" style="color: ${color}; text-decoration: none; font-weight: 700;">www.cevro.ai</a>
+                                    <span style="color: ${color}; font-weight: 700;">www.cevro.ai</span>
                                     ${linkedinIcon}
                                 </td></tr>
                                 ${calendarBtn}
@@ -253,23 +261,32 @@
         document.getElementById('signature-output').innerHTML = template;
     }
 
+    async function copyAsImage() {
+        const signatureElement = document.getElementById("signature-output");
+        
+        // Convert the HTML signature to a Canvas
+        const canvas = await html2canvas(signatureElement, {
+            useCORS: true,
+            backgroundColor: null,
+            scale: 2 // High resolution
+        });
+
+        // Convert Canvas to Blob
+        canvas.toBlob(async (blob) => {
+            const item = new ClipboardItem({ "image/png": blob });
+            await navigator.clipboard.write([item]);
+            
+            // Show Toast
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 4000);
+        });
+    }
+
     function toggleDarkMode() {
         const pane = document.getElementById('previewPane');
         pane.classList.toggle('dark-mode');
-        document.querySelector('.btn-secondary').innerText = pane.classList.contains('dark-mode') ? "Light Mode" : "Night Mode";
-    }
-
-    function copyToClipboard() {
-        const node = document.getElementById("signature-output");
-        const range = document.createRange();
-        range.selectNode(node);
-        window.getSelection().removeAllRanges();
-        window.getSelection().addRange(range);
-        document.execCommand("copy");
-        
-        const toast = document.getElementById('toast');
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 4000);
+        document.querySelector('.dark-toggle').innerText = pane.classList.contains('dark-mode') ? "Light Mode" : "Night Mode";
     }
 
     generate();
