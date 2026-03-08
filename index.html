@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cevro | Signature Studio</title>
+    <title>Cevro | Ultimate Signature Studio</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #5b2bbf;
-            --primary-light: #7c4dff;
+            --primary-light: #9d72ff;
             --bg-gradient: linear-gradient(135deg, #f5f3ff 0%, #ffffff 100%);
             --card: #ffffff;
             --border: #e2e8f0;
@@ -39,7 +39,6 @@
             position: relative;
         }
 
-        /* Sidebar Editor */
         .editor-side {
             width: 380px;
             padding: 40px;
@@ -68,16 +67,15 @@
         .phone-row { display: flex; gap: 10px; }
         .phone-row select { width: 120px; }
 
-        /* Preview Area */
         .preview-side {
             flex: 1;
-            background: rgba(241, 245, 249, 0.5);
+            background: #f1f5f9;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 40px;
-            transition: background 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .preview-side.dark-mode { background: #121212; }
@@ -90,12 +88,14 @@
             max-width: 580px;
             width: 100%;
             border: 1px solid #f1f5f9;
-            transition: background 0.4s ease;
+            transition: all 0.4s ease;
         }
 
         .dark-mode .signature-wrapper { background: #1e1e1e; border-color: #333; }
+        .dark-mode .sig-name { color: #ffffff !important; }
+        .dark-mode .sig-title { color: #94a3b8 !important; }
+        .dark-mode .sig-phone { color: #cbd5e1 !important; }
 
-        /* Modern Toast */
         #toast {
             position: absolute;
             bottom: -100px;
@@ -118,12 +118,7 @@
         .toast-check { background: #10b981; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; }
 
         .controls { margin-top: 30px; display: flex; gap: 15px; }
-
-        .btn {
-            border: none; padding: 16px 32px; border-radius: 16px; font-weight: 700;
-            font-size: 15px; cursor: pointer; transition: all 0.3s ease;
-        }
-
+        .btn { border: none; padding: 16px 32px; border-radius: 16px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; }
         .copy-button { background: var(--primary); color: white; box-shadow: 0 10px 25px -5px rgba(91, 43, 191, 0.4); }
         .dark-mode-toggle { background: #475569; color: white; }
 
@@ -138,7 +133,7 @@
         <div class="toast-check">✓</div>
         <div>
             <div style="font-weight: 700; font-size: 14px;">Copied Successfully!</div>
-            <div style="font-size: 12px; color: #94a3b8;">Paste it in Gmail Signature settings.</div>
+            <div style="font-size: 12px; color: #94a3b8;">Paste it in Gmail settings.</div>
         </div>
     </div>
 
@@ -164,7 +159,7 @@
                     <option value="+30">GR (+30)</option>
                     <option value="+36">HU (+36)</option>
                     <option value="+353">IE (+353)</option>
-                    <option value="+972">IL (+972)</option>
+                    <option value="+972" selected>IL (+972)</option>
                     <option value="+39">IT (+39)</option>
                     <option value="+31">NL (+31)</option>
                     <option value="+47">NO (+47)</option>
@@ -174,7 +169,7 @@
                     <option value="+381">RS (+381)</option>
                     <option value="+46">SE (+46)</option>
                     <option value="+44">UK (+44)</option>
-                    <option value="+1" selected>US (+1)</option>
+                    <option value="+1">US (+1)</option>
                 </select>
                 <input type="text" id="phone" placeholder="50 000 000" oninput="generate()">
             </div>
@@ -209,7 +204,7 @@
     <div class="preview-side" id="previewPane">
         <div id="signature-output" class="signature-wrapper"></div>
         <div class="controls">
-            <button class="btn copy-button" onclick="copyToClipboard()">Copy to Clipboard</button>
+            <button class="btn copy-button" onclick="copyToClipboard()">Copy Signature</button>
             <button class="btn dark-mode-toggle" onclick="toggleDarkMode()">Night Mode</button>
         </div>
     </div>
@@ -217,8 +212,8 @@
 
 <script>
     function generate() {
-        const name = document.getElementById('name').value || "Full Name";
-        const title = document.getElementById('title').value || "Job Position";
+        const name = document.getElementById('name').value || "John Doe";
+        const title = document.getElementById('title').value || "Creative Director";
         const phone = document.getElementById('phone').value;
         const prefix = document.getElementById('prefix').value;
         const linkedin = document.getElementById('linkedin').value;
@@ -229,7 +224,7 @@
 
         document.getElementById('scaleVal').innerText = Math.round(scale * 100);
 
-        const logoWidth = 130 * scale; 
+        const logoWidth = 135 * scale; 
         const nameSize = 20 * scale;
         const titleSize = 14 * scale;
         const textSize = 13 * scale;
@@ -237,7 +232,7 @@
         const logoUrl = "https://raw.githubusercontent.com/lidor1997/cevro-signature-generator/06d880fec1752804a8f64b013d5c7382455fc7eb/1763362497422%20(1).png";
         
         const phoneHtml = phone ? `
-            <tr><td style="padding-bottom: ${4 * scale}px; font-family: ${font}; font-size: ${textSize}px; color: #334155;">
+            <tr><td class="sig-phone" style="padding-bottom: ${4 * scale}px; font-family: ${font}; font-size: ${textSize}px; color: #334155;">
                 <span style="color: ${color}; font-weight: 800; font-size: ${textSize - 2}px; margin-right: 4px;">M:</span> ${prefix} ${phone}
             </td></tr>` : '';
 
@@ -260,11 +255,11 @@
                     <td style="padding-left: ${25 * scale}px; vertical-align: middle;">
                         <table cellpadding="0" cellspacing="0" style="border-collapse: collapse !important;">
                             <tbody>
-                                <tr><td style="font-family: ${font}; font-weight: 700; color: #000; font-size: ${nameSize}px; padding-bottom: 2px;">${name}</td></tr>
-                                <tr><td style="font-family: ${font}; color: #64748b; font-weight: 500; font-size: ${titleSize}px; padding-bottom: ${12 * scale}px;">${title}</td></tr>
+                                <tr><td class="sig-name" style="font-family: ${font}; font-weight: 700; color: #000; font-size: ${nameSize}px; padding-bottom: 2px;">${name}</td></tr>
+                                <tr><td class="sig-title" style="font-family: ${font}; color: #64748b; font-weight: 500; font-size: ${titleSize}px; padding-bottom: ${12 * scale}px;">${title}</td></tr>
                                 ${phoneHtml}
                                 <tr><td style="padding-top: ${4 * scale}px; font-family: ${font}; font-size: ${textSize}px;">
-                                    <a href="https://www.cevro.ai" target="_blank" style="color: ${color}; text-decoration: none; font-weight: 700;">www.cevro.ai</a>
+                                    <a class="sig-web" href="https://www.cevro.ai" target="_blank" style="color: ${color}; text-decoration: none; font-weight: 700;">www.cevro.ai</a>
                                     ${linkedinIcon}
                                 </td></tr>
                                 ${calendarBtn}
