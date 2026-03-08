@@ -68,17 +68,13 @@
             align-items: center;
             justify-content: center;
             padding: 40px;
-            transition: background 0.4s ease;
         }
 
-        .preview-side.dark-mode { background: #121212; }
-
         .signature-wrapper {
-            /* Reduced padding for a tighter box */
-            padding: 30px; 
-            border-radius: 20px;
+            padding: 20px 25px; 
+            border-radius: 18px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.04);
-            max-width: 520px;
+            max-width: 480px;
             width: fit-content;
             background: linear-gradient(135deg, #fdfaff 0%, #ffffff 100%);
         }
@@ -107,7 +103,6 @@
         .controls { margin-top: 30px; display: flex; gap: 15px; }
         .btn { border: none; padding: 16px 32px; border-radius: 16px; font-weight: 700; cursor: pointer; transition: 0.3s; }
         .copy-button { background: var(--primary); color: white; }
-        .dark-mode-toggle { background: #475569; color: white; }
 
         input[type="range"] { height: 6px; background: #e2e8f0; border-radius: 5px; appearance: none; cursor: pointer; width: 100%; }
         input[type="range"]::-webkit-slider-thumb { appearance: none; width: 20px; height: 20px; background: var(--primary); border: 3px solid white; border-radius: 50%; }
@@ -126,11 +121,11 @@
 
     <div class="editor-side">
         <div class="logo-header">Cevro Studio</div>
-
         <span class="section-label">Identity</span>
         <div class="field"><label>Full Name</label><input type="text" id="name" placeholder="John Doe" oninput="generate()"></div>
         <div class="field"><label>Job Title</label><input type="text" id="title" placeholder="Creative Director" oninput="generate()"></div>
         
+        <span class="section-label">Contact</span>
         <div class="field">
             <label>Phone Number</label>
             <div style="display:flex; gap:10px;">
@@ -162,10 +157,7 @@
                 <input type="text" id="phone" placeholder="555-0123" oninput="generate()">
             </div>
         </div>
-
-        <span class="section-label">Connections</span>
         <div class="field"><label>LinkedIn URL</label><input type="text" id="linkedin" placeholder="LinkedIn link" oninput="generate()"></div>
-        <div class="field"><label>Meeting Link</label><input type="text" id="calendar" placeholder="Calendly link" oninput="generate()"></div>
 
         <span class="section-label">Design & Scale</span>
         <div class="field">
@@ -181,38 +173,33 @@
         </div>
     </div>
 
-    <div class="preview-side" id="previewPane">
+    <div class="preview-side">
         <div id="signature-output" class="signature-wrapper"></div>
-        <div class="controls">
-            <button class="btn copy-button" onclick="copyToClipboard()">Copy Signature</button>
-            <button class="btn dark-mode-toggle" onclick="toggleDarkMode()">Night Mode</button>
-        </div>
     </div>
 </div>
 
 <script>
     function generate() {
-        const name = document.getElementById('name').value || "John Doe";
-        const title = document.getElementById('title').value || "Creative Director";
+        const name = document.getElementById('name').value || "Lidor Kupershmid";
+        const title = document.getElementById('title').value || "AI Engineer";
         const phone = document.getElementById('phone').value;
         const prefix = document.getElementById('prefix').value;
         const linkedin = document.getElementById('linkedin').value;
-        const calendar = document.getElementById('calendar').value;
         const color = document.getElementById('accentColor').value;
         const scale = document.getElementById('globalScale').value / 100;
 
         document.getElementById('scaleVal').innerText = Math.round(scale * 100);
 
-        const logoWidth = 140 * scale; 
+        const logoWidth = 125 * scale; 
         const nameSize = 20 * scale;
         const titleSize = 14 * scale;
         const textSize = 13 * scale;
-        const padding = 20 * scale; // Tighter padding for a smaller box
+        const padding = 15 * scale;
 
         const logoUrl = "https://raw.githubusercontent.com/lidor1997/cevro-signature-generator/06d880fec1752804a8f64b013d5c7382455fc7eb/1763362497422%20(1).png";
         
         const phoneHtml = phone ? `
-            <tr><td style="padding-bottom: ${4 * scale}px; font-family: sans-serif; font-size: ${textSize}px; color: #334155; border: none !important;">
+            <tr><td style="padding-bottom: ${4 * scale}px; font-family: sans-serif; font-size: ${textSize}px; color: #4b5563; border: none !important;">
                 <span style="color: ${color}; font-weight: 800; font-size: ${textSize - 2}px; margin-right: 4px;">M:</span> ${prefix} ${phone}
             </td></tr>` : '';
 
@@ -221,28 +208,22 @@
                 <img src="https://cdn-icons-png.flaticon.com/32/174/174857.png" width="${16 * scale}" height="${16 * scale}" style="display:block; border:0;">
             </a>` : '';
 
-        const calendarBtn = calendar ? `
-            <tr><td style="padding-top: ${15 * scale}px; border: none !important;">
-                <a href="${calendar}" target="_blank" style="background-color: ${color}; color: #ffffff; padding: ${8 * scale}px ${18 * scale}px; text-decoration: none; border-radius: 6px; font-size: ${textSize - 1}px; font-weight: 700; display: inline-block;">Schedule a Call</a>
-            </td></tr>` : '';
-
         const template = `
             <table cellpadding="0" cellspacing="0" border="0" style="vertical-align: middle; border-collapse: collapse !important; background: linear-gradient(135deg, #fdfaff 0%, #ffffff 100%); background-color: #ffffff; border: none !important; margin: 0; padding: 0;">
                 <tbody><tr style="border: none !important;">
-                    <td style="padding: ${padding}px ${padding}px ${padding}px 0; border-right: 2px solid ${color} !important; vertical-align: middle; border-top: none !important; border-bottom: none !important; border-left: none !important;">
+                    <td style="padding-right: ${padding}px; border-right: 2px solid ${color} !important; vertical-align: middle; border-top: none !important; border-bottom: none !important; border-left: none !important;">
                         <img src="${logoUrl}" width="${logoWidth}" alt="Cevro" style="display: block; border: 0; pointer-events: none;">
                     </td>
-                    <td style="padding: ${padding}px 0 ${padding}px ${padding}px; vertical-align: middle; white-space: nowrap; border: none !important;">
+                    <td style="padding-left: ${padding}px; vertical-align: middle; white-space: nowrap; border: none !important;">
                         <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse !important; border: none !important; margin: 0; padding: 0;">
                             <tbody>
-                                <tr style="border: none !important;"><td style="font-family: sans-serif; font-weight: 700; color: #000000; font-size: ${nameSize}px; line-height: 1.2; padding-bottom: 2px; border: none !important;">${name}</td></tr>
-                                <tr style="border: none !important;"><td style="font-family: sans-serif; color: #64748b; font-weight: 500; font-size: ${titleSize}px; padding-bottom: ${10 * scale}px; border: none !important;">${title}</td></tr>
+                                <tr style="border: none !important;"><td style="font-family: sans-serif; font-weight: 700; color: #010101; font-size: ${nameSize}px; line-height: 1.2; padding-bottom: 2px; border: none !important;">${name}</td></tr>
+                                <tr style="border: none !important;"><td style="font-family: sans-serif; color: #64748b; font-weight: 500; font-size: ${titleSize}px; padding-bottom: ${8 * scale}px; border: none !important;">${title}</td></tr>
                                 ${phoneHtml}
-                                <tr style="border: none !important;"><td style="padding-top: ${4 * scale}px; font-family: sans-serif; font-size: ${textSize}px; border: none !important;">
+                                <tr style="border: none !important;"><td style="padding-top: ${2 * scale}px; font-family: sans-serif; font-size: ${textSize}px; border: none !important;">
                                     <a href="https://www.cevro.ai" target="_blank" style="color: ${color}; text-decoration: none; font-weight: 700;">www.cevro.ai</a>
                                     ${linkedinIcon}
                                 </td></tr>
-                                ${calendarBtn}
                             </tbody>
                         </table>
                     </td>
@@ -252,27 +233,7 @@
         document.getElementById('signature-output').innerHTML = template;
     }
 
-    function toggleDarkMode() {
-        const pane = document.getElementById('previewPane');
-        pane.classList.toggle('dark-mode');
-        document.querySelector('.dark-mode-toggle').innerText = pane.classList.contains('dark-mode') ? "Light Mode" : "Night Mode";
-    }
-
-    function copyToClipboard() {
-        const node = document.getElementById("signature-output");
-        const range = document.createRange();
-        range.selectNode(node);
-        window.getSelection().removeAllRanges();
-        window.getSelection().addRange(range);
-        document.execCommand("copy");
-        
-        const toast = document.getElementById('toast');
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 4000);
-    }
-
     generate();
 </script>
-
 </body>
 </html>
