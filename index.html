@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cevro | Pro Signature Studio</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
             --primary: #5b2bbf;
@@ -59,12 +58,17 @@
 
         input, select {
             width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: 12px;
-            font-size: 14px; background: #f8fafc; outline: none;
+            font-size: 14px; background: #f8fafc; transition: all 0.25s ease; outline: none;
         }
+
+        input:focus, select:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(91, 43, 191, 0.1); }
+
+        .phone-row { display: flex; gap: 10px; }
+        .phone-row select { width: 120px; }
 
         .preview-side {
             flex: 1;
-            background: #f1f5f9;
+            background: rgba(241, 245, 249, 0.5);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -75,7 +79,6 @@
 
         .preview-side.dark-mode { background: #121212; }
 
-        /* The wrapper is now the "Capture Area" */
         .signature-wrapper {
             background: white;
             padding: 45px;
@@ -83,6 +86,7 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.04);
             max-width: 580px;
             width: fit-content;
+            border: 1px solid #f1f5f9;
         }
 
         #toast {
@@ -107,11 +111,11 @@
         .toast-check { background: #10b981; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; }
 
         .controls { margin-top: 30px; display: flex; gap: 15px; }
-        .btn { border: none; padding: 16px 32px; border-radius: 16px; font-weight: 700; cursor: pointer; transition: 0.3s; }
-        .copy-button { background: var(--primary); color: white; }
-        .dark-toggle { background: #475569; color: white; }
+        .btn { border: none; padding: 16px 32px; border-radius: 16px; font-weight: 700; font-size: 15px; cursor: pointer; transition: all 0.3s ease; }
+        .copy-button { background: var(--primary); color: white; box-shadow: 0 10px 25px -5px rgba(91, 43, 191, 0.4); }
+        .dark-mode-toggle { background: #475569; color: white; }
 
-        input[type="range"] { height: 6px; background: #e2e8f0; border-radius: 5px; appearance: none; cursor: pointer; }
+        input[type="range"] { height: 6px; background: #e2e8f0; border-radius: 5px; appearance: none; cursor: pointer; width: 100%; }
         input[type="range"]::-webkit-slider-thumb { appearance: none; width: 20px; height: 20px; background: var(--primary); border: 3px solid white; border-radius: 50%; }
     </style>
 </head>
@@ -121,8 +125,8 @@
     <div id="toast">
         <div class="toast-check">✓</div>
         <div>
-            <div style="font-weight: 700; font-size: 14px;">Copied as Picture!</div>
-            <div style="font-size: 12px; color: #94a3b8;">It's now non-editable. Paste in Gmail.</div>
+            <div style="font-weight: 700; font-size: 14px;">Copied Successfully!</div>
+            <div style="font-size: 12px; color: #94a3b8;">Paste it in Gmail Signature settings.</div>
         </div>
     </div>
 
@@ -134,9 +138,8 @@
         <div class="field"><label>Job Title</label><input type="text" id="title" placeholder="Creative Director" oninput="generate()"></div>
         <div class="field">
             <label>Phone Number</label>
-            <div style="display:flex; gap:10px;">
-                <select id="prefix" onchange="generate()" style="width:115px;">
-                    <option value="+1" selected>US (+1)</option>
+            <div class="phone-row">
+                <select id="prefix" onchange="generate()">
                     <option value="+43">AT (+43)</option>
                     <option value="+32">BE (+32)</option>
                     <option value="+41">CH (+41)</option>
@@ -159,6 +162,7 @@
                     <option value="+381">RS (+381)</option>
                     <option value="+46">SE (+46)</option>
                     <option value="+44">UK (+44)</option>
+                    <option value="+1" selected>US (+1)</option>
                 </select>
                 <input type="text" id="phone" placeholder="50 000 000" oninput="generate()">
             </div>
@@ -174,7 +178,7 @@
             <select id="fontFamily" onchange="generate()">
                 <option value="'Inter', sans-serif">Inter (Modern)</option>
                 <option value="'Calibri', 'Candara', sans-serif">Calibri (Business)</option>
-                <option value="Arial, sans-serif">Arial</option>
+                <option value="Arial, sans-serif">Arial (Standard)</option>
             </select>
         </div>
         <div class="field">
@@ -193,8 +197,8 @@
     <div class="preview-side" id="previewPane">
         <div id="signature-output" class="signature-wrapper"></div>
         <div class="controls">
-            <button class="btn copy-button" onclick="copyAsImage()">Copy as Picture</button>
-            <button class="btn dark-toggle" onclick="toggleDarkMode()">Night Mode</button>
+            <button class="btn copy-button" onclick="copyToClipboard()">Copy Signature</button>
+            <button class="btn dark-mode-toggle" onclick="toggleDarkMode()">Night Mode</button>
         </div>
     </div>
 </div>
@@ -226,20 +230,20 @@
             </td></tr>` : '';
 
         const linkedinIcon = linkedin ? `
-            <span style="margin-left: ${8 * scale}px; display: inline-block; vertical-align: middle;">
-                <img src="https://cdn-icons-png.flaticon.com/32/174/174857.png" width="${16 * scale}" height="${16 * scale}">
-            </span>` : '';
+            <a href="${linkedin}" target="_blank" style="text-decoration:none; margin-left: ${8 * scale}px; display: inline-block; vertical-align: middle;">
+                <img src="https://cdn-icons-png.flaticon.com/32/174/174857.png" width="${16 * scale}" height="${16 * scale}" style="display:block; border:0; pointer-events: none;">
+            </a>` : '';
 
         const calendarBtn = calendar ? `
             <tr><td style="padding-top: ${15 * scale}px;">
-                <div style="background-color: ${color}; color: #ffffff; padding: ${8 * scale}px ${18 * scale}px; border-radius: 6px; font-size: ${textSize - 1}px; font-weight: 700; display: inline-block;">Schedule a Call</div>
+                <a href="${calendar}" target="_blank" style="background-color: ${color}; color: #ffffff; padding: ${8 * scale}px ${18 * scale}px; text-decoration: none; border-radius: 6px; font-size: ${textSize - 1}px; font-weight: 700; display: inline-block;">Schedule a Call</a>
             </td></tr>` : '';
 
         const template = `
-            <table cellpadding="0" cellspacing="0" style="vertical-align: middle; border-collapse: collapse !important; background-color: #ffffff;">
+            <table cellpadding="0" cellspacing="0" style="vertical-align: middle; border-collapse: collapse !important;">
                 <tbody><tr>
                     <td style="padding-right: ${25 * scale}px; border-right: 2px solid ${color}; vertical-align: middle;">
-                        <img src="${logoUrl}" width="${logoWidth}" crossorigin="anonymous" style="display: block; border: 0;">
+                        <img src="${logoUrl}" width="${logoWidth}" alt="Cevro" style="display: block; border: 0; pointer-events: none; -webkit-user-drag: none;">
                     </td>
                     <td style="padding-left: ${25 * scale}px; vertical-align: middle; white-space: nowrap;">
                         <table cellpadding="0" cellspacing="0" style="border-collapse: collapse !important;">
@@ -248,7 +252,7 @@
                                 <tr><td style="font-family: ${font}; color: #64748b; font-weight: 500; font-size: ${titleSize}px; padding-bottom: ${12 * scale}px;">${title}</td></tr>
                                 ${phoneHtml}
                                 <tr><td style="padding-top: ${4 * scale}px; font-family: ${font}; font-size: ${textSize}px;">
-                                    <span style="color: ${color}; font-weight: 700;">www.cevro.ai</span>
+                                    <a href="https://www.cevro.ai" target="_blank" style="color: ${color}; text-decoration: none; font-weight: 700;">www.cevro.ai</a>
                                     ${linkedinIcon}
                                 </td></tr>
                                 ${calendarBtn}
@@ -261,50 +265,23 @@
         document.getElementById('signature-output').innerHTML = template;
     }
 
-    async function copyAsImage() {
-    const btn = document.querySelector('.copy-button');
-    const originalText = btn.innerText;
-    
-    try {
-        btn.innerText = "Processing...";
-        const signatureElement = document.getElementById("signature-output");
-        
-        const canvas = await html2canvas(signatureElement, {
-            useCORS: true, 
-            allowTaint: false,
-            backgroundColor: "#ffffff", // Forces white background for the image
-            scale: 2 
-        });
-
-        canvas.toBlob(async (blob) => {
-            try {
-                const item = new ClipboardItem({ "image/png": blob });
-                await navigator.clipboard.write([item]);
-                
-                // Show Success Toast
-                const toast = document.getElementById('toast');
-                toast.classList.add('show');
-                setTimeout(() => toast.classList.remove('show'), 4000);
-            } catch (err) {
-                console.error("Clipboard Error:", err);
-                alert("Clipboard access denied. Please use HTTPS or check browser permissions.");
-            } finally {
-                btn.innerText = originalText;
-            }
-        }, "image/png");
-
-    } catch (e) {
-        console.error("Image Generation Error:", e);
-        btn.innerText = originalText;
-        alert("Failed to generate image. Please ensure you are using a modern browser.");
-    }
-}
-Recommendation for Lidor
-
     function toggleDarkMode() {
         const pane = document.getElementById('previewPane');
         pane.classList.toggle('dark-mode');
-        document.querySelector('.dark-toggle').innerText = pane.classList.contains('dark-mode') ? "Light Mode" : "Night Mode";
+        document.querySelector('.dark-mode-toggle').innerText = pane.classList.contains('dark-mode') ? "Light Mode" : "Night Mode";
+    }
+
+    function copyToClipboard() {
+        const node = document.getElementById("signature-output");
+        const range = document.createRange();
+        range.selectNode(node);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+        document.execCommand("copy");
+        
+        const toast = document.getElementById('toast');
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 4000);
     }
 
     generate();
