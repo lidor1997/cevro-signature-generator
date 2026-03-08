@@ -12,6 +12,7 @@
             --text-dark: #1e293b;
             --text-light: #64748b;
             --border: #e2e8f0;
+            --success: #10b981;
         }
 
         body {
@@ -34,9 +35,10 @@
             box-shadow: 0 50px 100px -20px rgba(91, 43, 191, 0.12);
             overflow: hidden;
             border: 1px solid var(--border);
+            position: relative;
         }
 
-        /* Step-by-Step Sidebar */
+        /* Sidebar */
         .sidebar {
             width: 420px;
             padding: 40px;
@@ -45,152 +47,84 @@
             background: #fff;
         }
 
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 35px;
-        }
-
-        .logo-area h1 { font-size: 22px; margin: 0; color: var(--primary); font-weight: 800; }
+        .logo-area h1 { font-size: 22px; margin: 0 0 35px 0; color: var(--primary); font-weight: 800; }
 
         .step-container { margin-bottom: 30px; }
-        
-        .step-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .step-number {
-            background: var(--primary-soft);
-            color: var(--primary);
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        .step-title { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-light); }
+        .step-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+        .step-number { background: var(--primary-soft); color: var(--primary); width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
+        .step-title { font-size: 14px; font-weight: 700; text-transform: uppercase; color: var(--text-light); }
 
         .input-box { margin-bottom: 15px; }
-        label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text-dark); }
+        label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
         
         input, select {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            font-size: 14px;
-            background: #f8fafc;
-            outline: none;
-            box-sizing: border-box;
-            transition: 0.2s ease;
+            width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: 12px;
+            font-size: 14px; background: #f8fafc; outline: none; transition: 0.2s ease;
         }
 
         input:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(91, 43, 191, 0.08); }
 
         /* Preview Area */
-        .preview-pane {
-            flex: 1;
-            background: #f1f5f9;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px;
-        }
+        .preview-pane { flex: 1; background: #f1f5f9; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; }
 
-        .preview-pane.dark { background: #0f172a; }
+        .signature-card { background: white; padding: 50px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
 
-        .signature-card {
-            background: white;
-            padding: 50px;
-            border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-            width: auto;
-            min-width: 500px;
-        }
+        .actions { margin-top: 40px; display: flex; gap: 15px; }
+        .btn { padding: 18px 36px; border-radius: 18px; font-weight: 700; font-size: 16px; cursor: pointer; border: none; transition: 0.3s; }
+        .btn-primary { background: var(--primary); color: white; box-shadow: 0 10px 20px rgba(91, 43, 191, 0.3); }
+        .btn-primary:hover { transform: translateY(-3px); }
 
-        .actions {
-            margin-top: 40px;
-            display: flex;
-            gap: 15px;
-        }
-
-        .btn {
-            padding: 18px 36px;
-            border-radius: 18px;
-            font-weight: 700;
-            font-size: 16px;
-            cursor: pointer;
-            border: none;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .btn-primary {
-            background: var(--primary);
+        /* Modern Toast Notification */
+        #toast {
+            position: absolute;
+            bottom: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
             color: white;
-            box-shadow: 0 10px 20px rgba(91, 43, 191, 0.3);
+            padding: 20px 30px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000;
+            width: 400px;
         }
 
-        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(91, 43, 191, 0.4); }
+        #toast.show { bottom: 40px; }
 
-        .btn-secondary { background: #fff; color: var(--text-dark); border: 1px solid var(--border); }
+        .toast-icon { background: var(--success); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .toast-text b { display: block; color: #fff; margin-bottom: 2px; }
+        .toast-text p { margin: 0; font-size: 13px; color: #94a3b8; }
 
-        input[type="range"] {
-            width: 100%;
-            height: 6px;
-            background: #e2e8f0;
-            border-radius: 10px;
-            appearance: none;
-            cursor: pointer;
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            background: var(--primary);
-            border: 4px solid white;
-            border-radius: 50%;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
+        input[type="range"] { width: 100%; height: 6px; background: #e2e8f0; border-radius: 10px; appearance: none; }
+        input[type="range"]::-webkit-slider-thumb { appearance: none; width: 20px; height: 20px; background: var(--primary); border: 4px solid white; border-radius: 50%; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
+    <div id="toast">
+        <div class="toast-icon">✓</div>
+        <div class="toast-text">
+            <b>Copied to Clipboard!</b>
+            <p>Open <b>Gmail Settings</b> → <b>Signature</b> and paste (Ctrl+V) your new design.</p>
+        </div>
+    </div>
+
     <div class="sidebar">
-        <div class="logo-area">
-            <h1>Cevro Studio</h1>
+        <div class="logo-area"><h1>Cevro Signature Studio</h1></div>
+
+        <div class="step-container">
+            <div class="step-header"><div class="step-number">1</div><div class="step-title">Identity</div></div>
+            <div class="input-box"><label>Full Name</label><input type="text" id="name" placeholder="E.g. Lidor Kupershmid" oninput="generate()"></div>
+            <div class="input-box"><label>Job Title</label><input type="text" id="title" placeholder="E.g. AI Engineer" oninput="generate()"></div>
         </div>
 
         <div class="step-container">
-            <div class="step-header">
-                <div class="step-number">1</div>
-                <div class="step-title">Identity</div>
-            </div>
-            <div class="input-box">
-                <label>Full Name</label>
-                <input type="text" id="name" placeholder="E.g. Lidor Kupershmid" oninput="generate()">
-            </div>
-            <div class="input-box">
-                <label>Job Title</label>
-                <input type="text" id="title" placeholder="E.g. AI Engineer" oninput="generate()">
-            </div>
-        </div>
-
-        <div class="step-container">
-            <div class="step-header">
-                <div class="step-number">2</div>
-                <div class="step-title">Contact</div>
-            </div>
+            <div class="step-header"><div class="step-number">2</div><div class="step-title">Contact</div></div>
             <div class="input-box">
                 <label>Phone Number</label>
                 <div style="display:flex; gap:8px;">
@@ -207,7 +141,7 @@
                         <option value="+30">GR (+30)</option>
                         <option value="+36">HU (+36)</option>
                         <option value="+353">IE (+353)</option>
-                        <option value="+972" selected>IL (+972)</option>
+                        <option value="+972">IL (+972)</option>
                         <option value="+39">IT (+39)</option>
                         <option value="+31">NL (+31)</option>
                         <option value="+47">NO (+47)</option>
@@ -217,33 +151,20 @@
                         <option value="+381">RS (+381)</option>
                         <option value="+46">SE (+46)</option>
                         <option value="+44">UK (+44)</option>
-                        <option value="+1">US (+1)</option>
+                        <option value="+1" selected>US (+1)</option>
                     </select>
                     <input type="text" id="phone" placeholder="50 000 000" oninput="generate()">
                 </div>
             </div>
-            <div class="input-box">
-                <label>LinkedIn Profile Link</label>
-                <input type="text" id="linkedin" placeholder="https://linkedin.com/in/..." oninput="generate()">
-            </div>
-            <div class="input-box">
-                <label>Booking / Calendar Link</label>
-                <input type="text" id="calendar" placeholder="Calendly or Meet link" oninput="generate()">
-            </div>
+            <div class="input-box"><label>LinkedIn Link</label><input type="text" id="linkedin" placeholder="https://linkedin.com/in/..." oninput="generate()"></div>
+            <div class="input-box"><label>Calendar Link</label><input type="text" id="calendar" placeholder="Calendly or Meet link" oninput="generate()"></div>
         </div>
 
         <div class="step-container">
-            <div class="step-header">
-                <div class="step-number">3</div>
-                <div class="step-title">Style</div>
-            </div>
+            <div class="step-header"><div class="step-number">3</div><div class="step-title">Style</div></div>
             <div class="input-box">
-                <label>Font Family</label>
-                <select id="fontFamily" onchange="generate()">
-                    <option value="'Inter', sans-serif">Inter (Modern)</option>
-                    <option value="'Calibri', Candara, sans-serif">Calibri (Business)</option>
-                    <option value="Arial, sans-serif">Arial (Standard)</option>
-                </select>
+                <label>Overall Scale: <span id="scaleDisplay">100</span>%</label>
+                <input type="range" id="scale" min="70" max="140" value="100" oninput="generate()">
             </div>
             <div class="input-box">
                 <label>Accent Color</label>
@@ -252,22 +173,14 @@
                     <option value="#000000">Cevro Black</option>
                 </select>
             </div>
-            <div class="input-box">
-                <label>Overall Scale: <span id="scaleDisplay">100</span>%</label>
-                <input type="range" id="scale" min="70" max="140" value="100" oninput="generate()">
-            </div>
         </div>
     </div>
 
-    <div class="preview-pane" id="previewPane">
-        <div id="signature-output" class="signature-card">
-            </div>
-        
+    <div class="preview-pane">
+        <div id="signature-output" class="signature-card"></div>
         <div class="actions">
-            <button class="btn btn-primary" onclick="copyToClipboard()">Copy for Gmail</button>
-            <button class="btn btn-secondary" onclick="toggleTheme()">Check Dark Mode</button>
+            <button class="btn btn-primary" onclick="copyToClipboard()">Copy Signature</button>
         </div>
-        <p style="margin-top:20px; font-size:12px; color:var(--text-light);">Tip: Paste directly into Gmail Signature settings.</p>
     </div>
 </div>
 
@@ -280,13 +193,11 @@
         const linkedin = document.getElementById('linkedin').value;
         const calendar = document.getElementById('calendar').value;
         const color = document.getElementById('accentColor').value;
-        const font = document.getElementById('fontFamily').value;
         
         const scaleVal = document.getElementById('scale').value / 100;
         document.getElementById('scaleDisplay').innerText = Math.round(scaleVal * 100);
 
-        // OPTIMIZED LARGER LOGO BASE
-        const logoWidth = 135 * scaleVal; 
+        const logoWidth = 140 * scaleVal; 
         const nameSize = 20 * scaleVal;
         const titleSize = 14 * scaleVal;
         const textSize = 13 * scaleVal;
@@ -294,63 +205,44 @@
         const logoUrl = "https://raw.githubusercontent.com/lidor1997/cevro-signature-generator/06d880fec1752804a8f64b013d5c7382455fc7eb/1763362497422%20(1).png";
         
         const phoneRow = phone ? `
-            <tr style="border-collapse: collapse;">
-                <td style="padding-bottom: ${4 * scaleVal}px; font-family: ${font}; font-size: ${textSize}px; color: #334155;">
-                    <span style="color: ${color}; font-weight: 800; font-size: ${textSize - 2}px; margin-right: 4px;">M:</span> ${prefix} ${phone}
-                </td>
-            </tr>` : '';
+            <tr><td style="padding-bottom: ${4 * scaleVal}px; font-family: sans-serif; font-size: ${textSize}px; color: #334155;">
+                <span style="color: ${color}; font-weight: 800; font-size: ${textSize - 2}px; margin-right: 4px;">M:</span> ${prefix} ${phone}
+            </td></tr>` : '';
 
         const linkedinIcon = linkedin ? `
             <a href="${linkedin}" target="_blank" style="text-decoration:none; margin-left: ${10 * scaleVal}px; display: inline-block; vertical-align: middle;">
-                <img src="https://cdn-icons-png.flaticon.com/32/174/174857.png" width="${16 * scaleVal}" height="${16 * scaleVal}" style="display:block; border:0; pointer-events: none;">
+                <img src="https://cdn-icons-png.flaticon.com/32/174/174857.png" width="${16 * scaleVal}" height="${16 * scaleVal}" style="display:block; border:0;">
             </a>` : '';
 
         const calendarBtn = calendar ? `
-            <tr>
-                <td style="padding-top: ${15 * scaleVal}px;">
-                    <a href="${calendar}" target="_blank" style="background-color: ${color}; color: #ffffff; padding: ${8 * scaleVal}px ${18 * scaleVal}px; text-decoration: none; border-radius: 6px; font-size: ${textSize - 1}px; font-weight: 700; display: inline-block;">Schedule a Call</a>
-                </td>
-            </tr>` : '';
+            <tr><td style="padding-top: ${15 * scaleVal}px;">
+                <a href="${calendar}" target="_blank" style="background-color: ${color}; color: #ffffff; padding: ${8 * scaleVal}px ${18 * scaleVal}px; text-decoration: none; border-radius: 6px; font-size: ${textSize - 1}px; font-weight: 700; display: inline-block;">Schedule a Call</a>
+            </td></tr>` : '';
 
-        // "CLEAN GMAIL" TEMPLATE - No extra divs, strictly tables for zero ghost lines
         const template = `
-            <table cellpadding="0" cellspacing="0" style="vertical-align: -webkit-baseline-middle; font-family: ${font}; border-collapse: collapse !important; mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
-                <tbody>
-                    <tr>
-                        <td style="padding-right: ${25 * scaleVal}px; border-right: 2px solid ${color}; vertical-align: middle;">
-                            <img src="${logoUrl}" width="${logoWidth}" alt="Cevro" style="display: block; border: 0; pointer-events: none; -webkit-user-drag: none;">
-                        </td>
-                        <td style="padding-left: ${25 * scaleVal}px; vertical-align: middle;">
-                            <table cellpadding="0" cellspacing="0" style="vertical-align: -webkit-baseline-middle; font-family: ${font}; border-collapse: collapse !important; mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
-                                <tbody>
-                                    <tr>
-                                        <td style="font-weight: 700; color: #000000; font-size: ${nameSize}px; line-height: 1.2; padding-bottom: ${2 * scaleVal}px;">${name}</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="color: #64748b; font-weight: 500; font-size: ${titleSize}px; padding-bottom: ${12 * scaleVal}px;">${title}</td>
-                                    </tr>
-                                    ${phoneRow}
-                                    <tr>
-                                        <td style="padding-top: ${4 * scaleVal}px; font-family: ${font}; font-size: ${textSize}px;">
-                                            <a href="https://www.cevro.ai" target="_blank" style="color: ${color}; text-decoration: none; font-weight: 700; letter-spacing: 0.3px;">www.cevro.ai</a>
-                                            ${linkedinIcon}
-                                        </td>
-                                    </tr>
-                                    ${calendarBtn}
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr>
-                </tbody>
+            <table cellpadding="0" cellspacing="0" style="vertical-align: middle; border-collapse: collapse !important; mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                <tbody><tr>
+                    <td style="padding-right: ${25 * scaleVal}px; border-right: 2px solid ${color}; vertical-align: middle;">
+                        <img src="${logoUrl}" width="${logoWidth}" alt="Cevro" style="display: block; border: 0;">
+                    </td>
+                    <td style="padding-left: ${25 * scaleVal}px; vertical-align: middle;">
+                        <table cellpadding="0" cellspacing="0" style="border-collapse: collapse !important; mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                            <tbody>
+                                <tr><td style="font-family: sans-serif; font-weight: 700; color: #000; font-size: ${nameSize}px; padding-bottom: 2px;">${name}</td></tr>
+                                <tr><td style="font-family: sans-serif; color: #64748b; font-weight: 500; font-size: ${titleSize}px; padding-bottom: ${12 * scaleVal}px;">${title}</td></tr>
+                                ${phoneRow}
+                                <tr><td style="padding-top: ${4 * scaleVal}px; font-family: sans-serif; font-size: ${textSize}px;">
+                                    <a href="https://www.cevro.ai" target="_blank" style="color: ${color}; text-decoration: none; font-weight: 700;">www.cevro.ai</a>
+                                    ${linkedinIcon}
+                                </td></tr>
+                                ${calendarBtn}
+                            </tbody>
+                        </table>
+                    </td>
+                </tr></tbody>
             </table>
         `;
-
         document.getElementById('signature-output').innerHTML = template;
-    }
-
-    function toggleTheme() {
-        const pane = document.getElementById('previewPane');
-        pane.classList.toggle('dark');
     }
 
     function copyToClipboard() {
@@ -360,11 +252,14 @@
         window.getSelection().removeAllRanges();
         window.getSelection().addRange(range);
         document.execCommand("copy");
-        alert("Signature Copied! Go to Gmail -> Settings -> Signature and Paste (Ctrl+V).");
+        
+        // Show Modern Toast
+        const toast = document.getElementById('toast');
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 5000);
     }
 
     generate();
 </script>
-
 </body>
 </html>
