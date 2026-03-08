@@ -150,38 +150,36 @@
 </div>
 
 <script>
-    function generate() {
-        const name = document.getElementById('name').value || "Lidor Kupershmid";
-        const title = document.getElementById('title').value || "Your Position";
-        const phone = document.getElementById('phone').value || "+972 00 000 0000";
-        const font = document.getElementById('fontFamily').value;
-        const size = document.getElementById('size').value;
-        
-        // Correct Raw GitHub URL for the image
-        const logoUrl = "https://raw.githubusercontent.com/lidor1997/cevro-signature-generator/main/logo.png";
+function generate() {
+    const name = document.getElementById('name').value || "Lidor Kupershmid";
+    const title = document.getElementById('title').value || "Software Engineer";
+    const phone = document.getElementById('phone').value || "+972-50-0000000";
+    const font = document.getElementById('fontFamily').value;
+    const size = document.getElementById('size').value;
+    
+    // UPDATED RAW URL
+    const logoUrl = "https://raw.githubusercontent.com/lidor1997/cevro-signature-generator/main/logo.png";
 
-        const template = `
-            <table cellpadding="0" cellspacing="0" style="font-family: ${font}; font-size: ${size}; color: #333333; line-height: 1.4;">
-                <tr>
-                    <td style="padding-right: 20px; border-right: 2px solid #5b2bbf; vertical-align: middle;">
-                        <img src="${logoUrl}" width="110" alt="Cevro Logo" style="display: block;">
-                    </td>
-                    <td style="padding-left: 20px; vertical-align: middle;">
-                        <div style="font-weight: 700; color: #5b2bbf; font-size: 1.2em; margin-bottom: 2px;">${name}</div>
-                        <div style="color: #666666; font-weight: 500; margin-bottom: 8px;">${title}</div>
-                        <div style="font-size: 0.9em; color: #888888;">
-                            <span style="color: #5b2bbf; font-weight: bold;">M:</span> ${phone}
-                        </div>
-                        <div style="font-size: 0.9em; margin-top: 2px;">
-                            <a href="https://cevro.studio" style="color: #5b2bbf; text-decoration: none; font-weight: bold;">www.cevro.studio</a>
-                        </div>
-                    </td>
-                </tr>
-            </table>
-        `;
+    const template = `
+        <table cellpadding="0" cellspacing="0" style="font-family: ${font}; font-size: ${size}; color: #333; line-height: 1.4;">
+            <tr>
+                <td style="padding-right: 20px; border-right: 2px solid #5b2bbf; vertical-align: middle;">
+                    <img src="${logoUrl}" width="100" style="display: block;" alt="Cevro Logo">
+                </td>
+                <td style="padding-left: 20px; vertical-align: middle;">
+                    <div style="font-weight: 700; color: #5b2bbf; font-size: 1.2em;">${name}</div>
+                    <div style="color: #666; margin-bottom: 5px;">${title}</div>
+                    <div style="font-size: 0.9em; color: #444;">
+                        <span style="color: #5b2bbf;">📞</span> ${phone} | 
+                        <a href="https://cevro.studio" style="color: #5b2bbf; text-decoration: none; font-weight: 600;">cevro.studio</a>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    `;
 
-        document.getElementById('signature-output').innerHTML = template;
-    }
+    document.getElementById('signature-output').innerHTML = template;
+}
 
     function copyToClipboard() {
         const range = document.createRange();
