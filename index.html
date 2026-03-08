@@ -59,8 +59,6 @@
             font-size: 14px; background: #f8fafc; transition: 0.2s ease; outline: none;
         }
 
-        input:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(91, 43, 191, 0.1); }
-
         .preview-side {
             flex: 1;
             display: flex;
@@ -71,6 +69,7 @@
             transition: background 0.4s ease;
         }
 
+        /* Night Mode Logic */
         .preview-side.dark-mode { background: #121212; }
 
         .signature-wrapper {
@@ -187,53 +186,52 @@
 </div>
 
 <script>
-   function generate() {
-    const name = document.getElementById('name').value || "John Doe";
-    const title = document.getElementById('title').value || "Creative Worker";
-    const phone = document.getElementById('phone').value;
-    const prefix = document.getElementById('prefix').value;
-    const linkedin = document.getElementById('linkedin').value;
-    const calendar = document.getElementById('calendar').value;
-    const color = document.getElementById('accentColor').value;
-    const scale = document.getElementById('globalScale').value / 100;
+    function generate() {
+        const name = document.getElementById('name').value || "Lidor Kupershmid";
+        const title = document.getElementById('title').value || "AI Engineer";
+        const phone = document.getElementById('phone').value;
+        const prefix = document.getElementById('prefix').value;
+        const linkedin = document.getElementById('linkedin').value;
+        const calendar = document.getElementById('calendar').value;
+        const color = document.getElementById('accentColor').value;
+        const scale = document.getElementById('globalScale').value / 100;
 
-    document.getElementById('scaleVal').innerText = Math.round(scale * 100);
+        document.getElementById('scaleVal').innerText = Math.round(scale * 100);
 
-    const logoWidth = 125 * scale; 
-    const nameSize = 20 * scale;
-    const titleSize = 14 * scale;
-    const textSize = 13 * scale;
-    const padding = 15 * scale;
+        const logoWidth = 125 * scale; 
+        const nameSize = 20 * scale;
+        const titleSize = 14 * scale;
+        const textSize = 13 * scale;
+        const padding = 15 * scale;
 
-    const logoUrl = "https://raw.githubusercontent.com/lidor1997/cevro-signature-generator/06d880fec1752804a8f64b013d5c7382455fc7eb/1763362497422%20(1).png";
-    
-    const phoneHtml = phone ? `
-        <tr>
-            <td style="padding-bottom:${4 * scale}px;font-family:sans-serif;font-size:${textSize}px;color:#4b5563;border:none!important;">
-                <span style="color:${color};font-weight:800;font-size:${textSize - 2}px;margin-right:4px;">M:</span>
-                ${prefix} ${phone}
-            </td>
-        </tr>` : '';
+        const logoUrl = "https://raw.githubusercontent.com/lidor1997/cevro-signature-generator/06d880fec1752804a8f64b013d5c7382455fc7eb/1763362497422%20(1).png";
+        
+        const phoneHtml = phone ? `
+            <tr>
+                <td style="padding-bottom:${4 * scale}px;font-family:sans-serif;font-size:${textSize}px;color:#4b5563;border:none!important;">
+                    <span style="color:${color};font-weight:800;font-size:${textSize - 2}px;margin-right:4px;">M:</span>
+                    ${prefix} ${phone}
+                </td>
+            </tr>` : '';
 
-    const linkedinIcon = linkedin ? `
-        <a href="${linkedin}" target="_blank" style="text-decoration:none;margin-left:${8 * scale}px;display:inline-block;vertical-align:middle;">
-            <img src="https://cdn-icons-png.flaticon.com/32/174/174857.png"
-                 width="${16 * scale}" height="${16 * scale}"
-                 style="display:block;border:0;">
-        </a>` : '';
+        const linkedinIcon = linkedin ? `
+            <a href="${linkedin}" target="_blank" style="text-decoration:none;margin-left:${8 * scale}px;display:inline-block;vertical-align:middle;">
+                <img src="https://cdn-icons-png.flaticon.com/32/174/174857.png"
+                     width="${16 * scale}" height="${16 * scale}"
+                     style="display:block;border:0;">
+            </a>` : '';
 
-    const calendarBtn = calendar ? `
-        <tr>
-            <td style="padding-top:${12 * scale}px;border:none!important;">
-                <a href="${calendar}" target="_blank"
-                   style="background-color:${color};color:#ffffff;padding:${8 * scale}px ${18 * scale}px;text-decoration:none;border-radius:6px;font-size:${textSize - 1}px;font-weight:700;display:inline-block;">
-                   Schedule a Call
-                </a>
-            </td>
-        </tr>` : '';
+        const calendarBtn = calendar ? `
+            <tr>
+                <td style="padding-top:${12 * scale}px;border:none!important;">
+                    <a href="${calendar}" target="_blank"
+                       style="background-color:${color};color:#ffffff;padding:${8 * scale}px ${18 * scale}px;text-decoration:none;border-radius:6px;font-size:${textSize - 1}px;font-weight:700;display:inline-block;">
+                       Schedule a Call
+                    </a>
+                </td>
+            </tr>` : '';
 
-    // שימוש באפור כהה מאוד (#333333) למניעת היפוך צבעים באייפון
-    const template = `
+        const template = `
 <table cellpadding="0" cellspacing="0" border="0"
 style="
 vertical-align:middle;
@@ -343,8 +341,14 @@ ${calendarBtn}
 </table>
 `;
 
-    document.getElementById('signature-output').innerHTML = template;
-}
+        document.getElementById('signature-output').innerHTML = template;
+    }
+
+    function toggleDarkMode() {
+        const pane = document.getElementById('previewPane');
+        pane.classList.toggle('dark-mode');
+        document.querySelector('.dark-mode-toggle').innerText = pane.classList.contains('dark-mode') ? "Light Mode" : "Night Mode";
+    }
 
     function copyToClipboard() {
         const node = document.getElementById("signature-output");
