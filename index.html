@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Cevro Signature Generator</title>
+
+<style>
+
+body{
+font-family:Arial;
+padding:40px;
+background:#f3f3f3;
+}
+
+.box{
+background:white;
+padding:30px;
+width:500px;
+border-radius:8px;
+}
+
+input{
+display:block;
+width:100%;
+padding:10px;
+margin-bottom:10px;
+}
+
+button{
+background:#5b2bbf;
+color:white;
+padding:12px;
+border:none;
+cursor:pointer;
+}
+
+#signature{
+margin-top:30px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+<h2>Cevro Email Signature Generator</h2>
+
+<input id="name" placeholder="Full Name">
+
+<input id="title" placeholder="Job Title">
+
+<input id="phone" placeholder="Phone">
+
+<input id="linkedin" placeholder="LinkedIn URL">
+
+<input id="calendar" placeholder="Calendar link">
+
+<button onclick="generate()">Generate Signature</button>
+
+<div id="signature"></div>
+
+</div>
+
+<script>
+
+function generate(){
+
+const name=document.getElementById("name").value
+
+const title=document.getElementById("title").value
+
+const phone=document.getElementById("phone").value
+
+const linkedin=document.getElementById("linkedin").value
+
+const calendar=document.getElementById("calendar").value
+
+document.getElementById("signature").innerHTML = `
+
+<table style="font-family:Arial;font-size:14px">
+
+<tr>
+
+<td colspan="2">
+
+<a href="${calendar}">Book a call</a>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td colspan="2" style="padding-top:10px">
+
+<strong>${name}</strong> | ${title}<br>
+
+m: ${phone}<br>
+
+<a href="https://cevro.ai">cevro.ai</a><br>
+
+<a href="${linkedin}">${name} LinkedIn</a>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="padding-top:15px">
+
+<img src="https://github.com/lidor1997/cevro-signature-generator/blob/6f0630a4b21224d49919e9b5ba947664af9f0b29/1763362497422%20(1).png" width="120">
+
+</td>
+
+</tr>
+
+</table>
+
+`
+
+}
+
+</script>
+
+</body>
+
+</html>
