@@ -8,125 +8,232 @@
     <style>
         :root {
             --primary: #5b2bbf;
+            --primary-light: #7c4dff;
             --bg-gradient: linear-gradient(135deg, #f5f3ff 0%, #ffffff 100%);
+            --card: #ffffff;
             --border: #e2e8f0;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
         }
 
         body {
             font-family: 'Inter', sans-serif;
             background: var(--bg-gradient);
+            background-attachment: fixed;
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            color: var(--text-main);
         }
 
         .app-container {
             display: flex;
-            width: 1100px;
-            height: 800px;
-            background: #ffffff;
+            width: 1200px;
+            height: 850px;
+            background: var(--card);
             border-radius: 30px;
             box-shadow: 0 40px 100px -20px rgba(91, 43, 191, 0.15);
             overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.8);
         }
 
+        /* Sidebar Editor */
         .editor-side {
             width: 380px;
             padding: 40px;
             border-right: 1px solid var(--border);
             overflow-y: auto;
+            background: rgba(255, 255, 255, 0.95);
         }
+
+        .logo-header { font-size: 24px; font-weight: 800; margin-bottom: 30px; color: var(--primary); letter-spacing: -1px; }
 
         .section-label {
             font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
-            color: #64748b; margin: 30px 0 15px 0; display: block; border-bottom: 1px solid var(--border); padding-bottom: 8px;
+            color: var(--text-muted); margin: 30px 0 15px 0; display: block; border-bottom: 1px solid var(--border); padding-bottom: 8px;
         }
 
-        .field { margin-bottom: 18px; }
+        .field { margin-bottom: 20px; }
         label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #475569; }
 
         input, select {
             width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: 12px;
-            font-size: 14px; background: #f8fafc; outline: none;
+            font-size: 14px; background: #f8fafc; transition: all 0.25s ease; outline: none;
         }
 
-        input:focus { border-color: var(--primary); background: #fff; }
+        input:focus, select:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(91, 43, 191, 0.1); }
 
-        .preview-side { flex: 1; background: #f8fafc; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .phone-row { display: flex; gap: 10px; }
+        .phone-row select { width: 120px; }
+
+        /* Preview Area */
+        .preview-side {
+            flex: 1;
+            background: rgba(241, 245, 249, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            transition: background 0.3s ease;
+        }
+
+        .preview-side.dark-mode {
+            background: #1a1a1a;
+        }
 
         .signature-wrapper {
-            background: white; padding: 40px; border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
-            user-select: all; /* Makes copying easier */
+            background: white;
+            padding: 45px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            max-width: 580px;
+            width: 100%;
+            border: 1px solid #f1f5f9;
+            transition: background 0.3s ease;
+        }
+
+        .dark-mode .signature-wrapper {
+            background: #242424;
+            border-color: #333;
+        }
+
+        /* Logic for text color in dark mode preview */
+        .dark-mode #signature-output * {
+            color: #e2e8f0 !important;
+        }
+        .dark-mode #signature-output a {
+            color: var(--primary-light) !important;
+        }
+
+        .controls {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            border: none;
+            padding: 16px 32px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
         .copy-button {
-            margin-top: 40px; background: var(--primary); color: white; border: none; padding: 18px 40px;
-            border-radius: 50px; font-weight: 700; cursor: pointer; transition: 0.3s;
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 10px 25px -5px rgba(91, 43, 191, 0.4);
         }
 
-        .copy-button:hover { transform: translateY(-2px); opacity: 0.9; }
+        .dark-mode-toggle {
+            background: #475569;
+            color: white;
+        }
+
+        input[type="range"] { height: 6px; background: #e2e8f0; border-radius: 5px; appearance: none; cursor: pointer; width: 100%; }
+        input[type="range"]::-webkit-slider-thumb { appearance: none; width: 20px; height: 20px; background: var(--primary); border: 3px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.2); border-radius: 50%; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
     <div class="editor-side">
-        <div style="font-size: 24px; font-weight: 800; color: var(--primary); margin-bottom: 20px;">Cevro Studio</div>
+        <div class="logo-header">Cevro Studio</div>
 
         <span class="section-label">Identity</span>
-        <div class="field"><label>Full Name</label><input type="text" id="name" placeholder="John Doe" oninput="generate()"></div>
-        <div class="field"><label>Job Title</label><input type="text" id="title" placeholder="Position" oninput="generate()"></div>
-        
+        <div class="field">
+            <label>Full Name</label>
+            <input type="text" id="name" placeholder="Enter name..." oninput="generate()">
+        </div>
+        <div class="field">
+            <label>Job Title</label>
+            <input type="text" id="title" placeholder="Enter title..." oninput="generate()">
+        </div>
         <div class="field">
             <label>Phone Number</label>
-            <div style="display:flex; gap:8px;">
-                <select id="prefix" onchange="generate()" style="width:100px;">
-                    <option value="+972">IL (+972)</option>
+            <div class="phone-row">
+                <select id="prefix" onchange="generate()">
+                    <option value="+43">AT (+43)</option>
+                    <option value="+32">BE (+32)</option>
+                    <option value="+41">CH (+41)</option>
+                    <option value="+420">CZ (+420)</option>
+                    <option value="+49">DE (+49)</option>
+                    <option value="+45">DK (+45)</option>
+                    <option value="+34">ES (+34)</option>
+                    <option value="+358">FI (+358)</option>
+                    <option value="+33">FR (+33)</option>
+                    <option value="+30">GR (+30)</option>
+                    <option value="+36">HU (+36)</option>
+                    <option value="+353">IE (+353)</option>
+                    <option value="+972" selected>IL (+972)</option>
+                    <option value="+39">IT (+39)</option>
+                    <option value="+31">NL (+31)</option>
+                    <option value="+47">NO (+47)</option>
+                    <option value="+48">PL (+48)</option>
+                    <option value="+351">PT (+351)</option>
+                    <option value="+40">RO (+40)</option>
                     <option value="+381">RS (+381)</option>
-                    <option value="+1">US (+1)</option>
+                    <option value="+46">SE (+46)</option>
                     <option value="+44">UK (+44)</option>
-                    </select>
+                    <option value="+1">US (+1)</option>
+                </select>
                 <input type="text" id="phone" placeholder="50 000 000" oninput="generate()">
             </div>
         </div>
 
-        <span class="section-label">Links</span>
-        <div class="field"><label>LinkedIn URL</label><input type="text" id="linkedin" placeholder="https://..." oninput="generate()"></div>
-        <div class="field"><label>Calendar Link</label><input type="text" id="calendar" placeholder="https://..." oninput="generate()"></div>
+        <span class="section-label">Connections</span>
+        <div class="field">
+            <label>LinkedIn URL</label>
+            <input type="text" id="linkedin" placeholder="LinkedIn link" oninput="generate()">
+        </div>
+        <div class="field">
+            <label>Meeting Link</label>
+            <input type="text" id="calendar" placeholder="Calendly / Meet link" oninput="generate()">
+        </div>
 
-        <span class="section-label">Logo Size</span>
-        <input type="range" id="logoWidth" min="40" max="180" value="100" oninput="generate()">
+        <span class="section-label">Design</span>
+        <div class="field">
+            <label>Logo Width (<span id="logoVal">100</span>px)</label>
+            <input type="range" id="logoWidth" min="40" max="180" value="100" oninput="generate()">
+        </div>
     </div>
 
-    <div class="preview-side">
+    <div class="preview-side" id="previewPane">
         <div id="signature-output" class="signature-wrapper"></div>
-        <button class="copy-button" onclick="copyToClipboard()">Copy to Clipboard</button>
+        <div class="controls">
+            <button class="btn copy-button" onclick="copyToClipboard()">Copy to Clipboard</button>
+            <button class="btn dark-mode-toggle" onclick="toggleDarkMode()">Preview Dark Mode</button>
+        </div>
     </div>
 </div>
 
 <script>
     function generate() {
-        const name = document.getElementById('name').value || "Your Name";
-        const title = document.getElementById('title').value || "Your Position";
-        const phone = document.getElementById('phone').value;
+        const name = document.getElementById('name').value || "Full Name";
+        const title = document.getElementById('title').value || "Job Position";
+        const phoneInput = document.getElementById('phone').value;
         const prefix = document.getElementById('prefix').value;
         const linkedin = document.getElementById('linkedin').value;
         const calendar = document.getElementById('calendar').value;
         const logoWidth = document.getElementById('logoWidth').value;
-
+        const color = "#5b2bbf";
+        
+        document.getElementById('logoVal').innerText = logoWidth;
         const logoUrl = "https://raw.githubusercontent.com/lidor1997/cevro-signature-generator/06d880fec1752804a8f64b013d5c7382455fc7eb/1763362497422%20(1).png";
-
-        const phoneBlock = phone ? `
-            <div style="font-size: 13px; color: #475569; margin-bottom: 4px;">
-                <span style="color: #5b2bbf; font-weight: 700;">M:</span> ${prefix} ${phone}
+        
+        const phoneHtml = phoneInput ? `
+            <div style="font-size: 13px; color: #334155; margin-bottom: 5px;">
+                <span style="color: ${color}; font-weight: 800; font-size: 11px;">M:</span> ${prefix} ${phoneInput}
             </div>` : '';
 
         const linkedinIcon = linkedin ? `
-            <a href="${linkedin}" target="_blank" style="margin-left: 10px; text-decoration: none; display: inline-block;">
-                <img src="https://cdn-icons-png.flaticon.com/32/174/174857.png" width="16" height="16" style="display: block; pointer-events: none;">
+            <a href="${linkedin}" target="_blank" style="text-decoration:none; margin-left: 8px; display: inline-block; vertical-align: middle;">
+                <img src="https://cdn-icons-png.flaticon.com/32/174/174857.png" width="16" height="16" style="display:block; border:0; pointer-events: none;">
             </a>` : '';
 
         const calendarBtn = calendar ? `
@@ -134,19 +241,18 @@
                 <a href="${calendar}" target="_blank" style="background-color: #000; color: #ffffff; padding: 8px 18px; text-decoration: none; border-radius: 6px; font-size: 12px; font-weight: 700; display: inline-block;">Schedule a Call</a>
             </div>` : '';
 
-        // The Signature Template
         const template = `
-            <table cellpadding="0" cellspacing="0" style="font-family: 'Inter', Helvetica, Arial, sans-serif; color: #1e293b; border-collapse: collapse;">
+            <table cellpadding="0" cellspacing="0" style="font-family: 'Inter', Helvetica, Arial, sans-serif; border-collapse: collapse; min-width: 320px;">
                 <tr>
-                    <td style="padding-right: 25px; border-right: 2px solid #5b2bbf; vertical-align: middle;">
+                    <td style="padding-right: 25px; border-right: 2px solid ${color}; vertical-align: middle;">
                         <img src="${logoUrl}" width="${logoWidth}" alt="Cevro" style="display: block; border: 0; pointer-events: none; -webkit-user-drag: none;">
                     </td>
                     <td style="padding-left: 25px; vertical-align: middle; white-space: nowrap;">
-                        <div style="font-weight: 700; color: #000000; font-size: 19px; line-height: 1.2; margin-bottom: 2px;">${name}</div>
+                        <div style="font-weight: 700; color: #000000; font-size: 20px; line-height: 1.2; margin-bottom: 2px;">${name}</div>
                         <div style="color: #64748b; font-weight: 500; font-size: 14px; margin-bottom: 12px;">${title}</div>
-                        ${phoneBlock}
+                        ${phoneHtml}
                         <div style="font-size: 13px; display: flex; align-items: center;">
-                            <a href="https://www.cevro.ai" target="_blank" style="color: #5b2bbf; text-decoration: none; font-weight: 700;">www.cevro.ai</a>
+                            <a href="https://www.cevro.ai" target="_blank" style="color: ${color}; text-decoration: none; font-weight: 700;">www.cevro.ai</a>
                             ${linkedinIcon}
                         </div>
                         ${calendarBtn}
@@ -158,6 +264,13 @@
         document.getElementById('signature-output').innerHTML = template;
     }
 
+    function toggleDarkMode() {
+        const pane = document.getElementById('previewPane');
+        pane.classList.toggle('dark-mode');
+        const isDark = pane.classList.contains('dark-mode');
+        document.querySelector('.dark-mode-toggle').innerText = isDark ? "Preview Light Mode" : "Preview Dark Mode";
+    }
+
     function copyToClipboard() {
         const node = document.getElementById("signature-output");
         const range = document.createRange();
@@ -165,7 +278,7 @@
         window.getSelection().removeAllRanges();
         window.getSelection().addRange(range);
         document.execCommand("copy");
-        alert("Signature copied! Paste into Gmail/Outlook.");
+        alert("Signature copied! Ready to paste.");
     }
 
     generate();
