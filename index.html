@@ -187,67 +187,75 @@
 </div>
 
 <script>
-    function generate() {
-        const name = document.getElementById('name').value || "John Doe";
-        const title = document.getElementById('title').value || "Creative Director";
-        const phone = document.getElementById('phone').value;
-        const prefix = document.getElementById('prefix').value;
-        const linkedin = document.getElementById('linkedin').value;
-        const calendar = document.getElementById('calendar').value;
-        const color = document.getElementById('accentColor').value;
-        const scale = document.getElementById('globalScale').value / 100;
+   function generate() {
+    const name = document.getElementById('name').value || "Lidor Kupershmid";
+    const title = document.getElementById('title').value || "AI Engineer";
+    const phone = document.getElementById('phone').value;
+    const prefix = document.getElementById('prefix').value;
+    const linkedin = document.getElementById('linkedin').value;
+    const calendar = document.getElementById('calendar').value;
+    const color = document.getElementById('accentColor').value;
+    const scale = document.getElementById('globalScale').value / 100;
 
-        document.getElementById('scaleVal').innerText = Math.round(scale * 100);
+    document.getElementById('scaleVal').innerText = Math.round(scale * 100);
 
-        const logoWidth = 125 * scale; 
-        const nameSize = 20 * scale;
-        const titleSize = 14 * scale;
-        const textSize = 13 * scale;
-        const padding = 15 * scale;
+    const logoWidth = 125 * scale; 
+    const nameSize = 20 * scale;
+    const titleSize = 14 * scale;
+    const textSize = 13 * scale;
+    const padding = 15 * scale;
 
-        const logoUrl = "https://raw.githubusercontent.com/lidor1997/cevro-signature-generator/06d880fec1752804a8f64b013d5c7382455fc7eb/1763362497422%20(1).png";
-        
-        const phoneHtml = phone ? `
-            <tr><td style="padding-bottom: ${4 * scale}px; font-family: sans-serif; font-size: ${textSize}px; color: #4b5563; border: none !important;">
-                <span style="color: ${color}; font-weight: 800; font-size: ${textSize - 2}px; margin-right: 4px;">M:</span> ${prefix} ${phone}
-            </td></tr>` : '';
+    const logoUrl = "https://raw.githubusercontent.com/lidor1997/cevro-signature-generator/06d880fec1752804a8f64b013d5c7382455fc7eb/1763362497422%20(1).png";
+    
+    const phoneHtml = phone ? `
+        <tr><td style="padding-bottom: ${4 * scale}px; font-family: sans-serif; font-size: ${textSize}px; color: #4b5563; border: none !important;">
+            <span style="color: ${color}; font-weight: 800; font-size: ${textSize - 2}px; margin-right: 4px;">M:</span> ${prefix} ${phone}
+        </td></tr>` : '';
 
-        const linkedinIcon = linkedin ? `
-            <a href="${linkedin}" target="_blank" style="text-decoration:none; margin-left: ${8 * scale}px; display: inline-block; vertical-align: middle;">
-                <img src="https://cdn-icons-png.flaticon.com/32/174/174857.png" width="${16 * scale}" height="${16 * scale}" style="display:block; border:0;">
-            </a>` : '';
+    const linkedinIcon = linkedin ? `
+        <a href="${linkedin}" target="_blank" style="text-decoration:none; margin-left: ${8 * scale}px; display: inline-block; vertical-align: middle;">
+            <img src="https://cdn-icons-png.flaticon.com/32/174/174857.png" width="${16 * scale}" height="${16 * scale}" style="display:block; border:0;">
+        </a>` : '';
 
-        const calendarBtn = calendar ? `
-            <tr><td style="padding-top: ${12 * scale}px; border: none !important;">
-                <a href="${calendar}" target="_blank" style="background-color: ${color}; color: #ffffff; padding: ${8 * scale}px ${18 * scale}px; text-decoration: none; border-radius: 6px; font-size: ${textSize - 1}px; font-weight: 700; display: inline-block;">Schedule a Call</a>
-            </td></tr>` : '';
+    const calendarBtn = calendar ? `
+        <tr><td style="padding-top: ${12 * scale}px; border: none !important;">
+            <a href="${calendar}" target="_blank" style="background-color: ${color}; color: #ffffff; padding: ${8 * scale}px ${18 * scale}px; text-decoration: none; border-radius: 6px; font-size: ${textSize - 1}px; font-weight: 700; display: inline-block;">Schedule a Call</a>
+        </td></tr>` : '';
 
-        // Added the #010101 fix to the name color below for iPhone Dark Mode
-        const template = `
-            <table cellpadding="0" cellspacing="0" border="0" style="vertical-align: middle; border-collapse: collapse !important; background: linear-gradient(135deg, #fdfaff 0%, #ffffff 100%); background-color: #ffffff; border: none !important; margin: 0; padding: 0;">
-                <tbody><tr style="border: none !important;">
-                    <td style="padding-right: ${padding}px; border-right: 2.3px solid ${color} !important; vertical-align: middle; border-top: none !important; border-bottom: none !important; border-left: none !important;">
-                        <img src="${logoUrl}" width="${logoWidth}" alt="Cevro" style="display: block; border: 0; pointer-events: none;">
-                    </td>
-                    <td style="padding-left: ${padding}px; vertical-align: middle; white-space: nowrap; border: none !important;">
-                        <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse !important; border: none !important; margin: 0; padding: 0;">
-                            <tbody>
-                                <tr style="border: none !important;"><td style="font-family: sans-serif; font-weight: 700; color: #010101; font-size: ${nameSize}px; line-height: 1.2; padding-bottom: 2px; border: none !important;">${name}</td></tr>
-                                <tr style="border: none !important;"><td style="font-family: sans-serif; color: #64748b; font-weight: 500; font-size: ${titleSize}px; padding-bottom: ${8 * scale}px; border: none !important;">${title}</td></tr>
-                                ${phoneHtml}
-                                <tr style="border: none !important;"><td style="padding-top: ${2 * scale}px; font-family: sans-serif; font-size: ${textSize}px; border: none !important;">
-                                    <a href="https://www.cevro.ai" target="_blank" style="color: ${color}; text-decoration: none; font-weight: 700;">www.cevro.ai</a>
-                                    ${linkedinIcon}
-                                </td></tr>
-                                ${calendarBtn}
-                            </tbody>
-                        </table>
-                    </td>
-                </tr></tbody>
-            </table>
-        `;
-        document.getElementById('signature-output').innerHTML = template;
-    }
+    // תבנית החתימה עם תיקון צבע לשם ולתפקיד למניעת היפוך ב-Dark Mode
+    const template = `
+        <table cellpadding="0" cellspacing="0" border="0" style="vertical-align: middle; border-collapse: collapse !important; background: linear-gradient(135deg, #fdfaff 0%, #ffffff 100%); background-color: #ffffff; border: none !important; margin: 0; padding: 0;">
+            <tbody><tr style="border: none !important;">
+                <td style="padding-right: ${padding}px; border-right: 2.3px solid ${color} !important; vertical-align: middle; border-top: none !important; border-bottom: none !important; border-left: none !important;">
+                    <img src="${logoUrl}" width="${logoWidth}" alt="Cevro" style="display: block; border: 0; pointer-events: none;">
+                </td>
+                <td style="padding-left: ${padding}px; vertical-align: middle; white-space: nowrap; border: none !important;">
+                    <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse !important; border: none !important; margin: 0; padding: 0;">
+                        <tbody>
+                            <tr style="border: none !important;">
+                                <td style="font-family: sans-serif; font-weight: 700; font-size: ${nameSize}px; line-height: 1.2; padding-bottom: 2px; border: none !important;">
+                                    <span style="color: #010101 !important; text-decoration: none;">${name}</span>
+                                </td>
+                            </tr>
+                            <tr style="border: none !important;">
+                                <td style="font-family: sans-serif; font-weight: 500; font-size: ${titleSize}px; padding-bottom: ${8 * scale}px; border: none !important;">
+                                    <span style="color: #010101 !important; opacity: 0.8;">${title}</span>
+                                </td>
+                            </tr>
+                            ${phoneHtml}
+                            <tr style="border: none !important;"><td style="padding-top: ${2 * scale}px; font-family: sans-serif; font-size: ${textSize}px; border: none !important;">
+                                <a href="https://www.cevro.ai" target="_blank" style="color: ${color}; text-decoration: none; font-weight: 700;">www.cevro.ai</a>
+                                ${linkedinIcon}
+                            </td></tr>
+                            ${calendarBtn}
+                        </tbody>
+                    </table>
+                </td>
+            </tr></tbody>
+        </table>
+    `;
+    document.getElementById('signature-output').innerHTML = template;
+}
 
     function toggleDarkMode() {
         const pane = document.getElementById('previewPane');
