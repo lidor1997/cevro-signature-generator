@@ -222,7 +222,6 @@
             <a href="${calendar}" target="_blank" style="background-color: ${color}; color: #ffffff; padding: ${8 * scale}px ${18 * scale}px; text-decoration: none; border-radius: 6px; font-size: ${textSize - 1}px; font-weight: 700; display: inline-block;">Schedule a Call</a>
         </td></tr>` : '';
 
-    // תבנית החתימה עם תיקון צבע לשם ולתפקיד למניעת היפוך ב-Dark Mode
     const template = `
         <table cellpadding="0" cellspacing="0" border="0" style="vertical-align: middle; border-collapse: collapse !important; background: linear-gradient(135deg, #fdfaff 0%, #ffffff 100%); background-color: #ffffff; border: none !important; margin: 0; padding: 0;">
             <tbody><tr style="border: none !important;">
@@ -232,28 +231,43 @@
                 <td style="padding-left: ${padding}px; vertical-align: middle; white-space: nowrap; border: none !important;">
                     <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse !important; border: none !important; margin: 0; padding: 0;">
                         <tbody>
+
                             <tr style="border: none !important;">
                                 <td style="font-family: sans-serif; font-weight: 700; font-size: ${nameSize}px; line-height: 1.2; padding-bottom: 2px; border: none !important;">
-                                    <span style="color: #010101 !important; text-decoration: none;">${name}</span>
+                                    <span style="color:#000000 !important; -webkit-text-fill-color:#000000 !important; text-decoration:none;">
+                                        ${name}
+                                    </span>
                                 </td>
                             </tr>
+
                             <tr style="border: none !important;">
                                 <td style="font-family: sans-serif; font-weight: 500; font-size: ${titleSize}px; padding-bottom: ${8 * scale}px; border: none !important;">
-                                    <span style="color: #010101 !important; opacity: 0.8;">${title}</span>
+                                    <span style="color:#000000 !important; -webkit-text-fill-color:#000000 !important; opacity:0.8;">
+                                        ${title}
+                                    </span>
                                 </td>
                             </tr>
+
                             ${phoneHtml}
-                            <tr style="border: none !important;"><td style="padding-top: ${2 * scale}px; font-family: sans-serif; font-size: ${textSize}px; border: none !important;">
-                                <a href="https://www.cevro.ai" target="_blank" style="color: ${color}; text-decoration: none; font-weight: 700;">www.cevro.ai</a>
-                                ${linkedinIcon}
-                            </td></tr>
+
+                            <tr style="border: none !important;">
+                                <td style="padding-top: ${2 * scale}px; font-family: sans-serif; font-size: ${textSize}px; border: none !important;">
+                                    <a href="https://www.cevro.ai" target="_blank" style="color: ${color}; text-decoration: none; font-weight: 700;">
+                                        www.cevro.ai
+                                    </a>
+                                    ${linkedinIcon}
+                                </td>
+                            </tr>
+
                             ${calendarBtn}
+
                         </tbody>
                     </table>
                 </td>
             </tr></tbody>
         </table>
     `;
+
     document.getElementById('signature-output').innerHTML = template;
 }
 
