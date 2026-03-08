@@ -3,166 +3,235 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cevro | Signature Generator</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@700&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <title>Cevro | Signature Studio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #5b2bbf;
-            --bg: #f4f7f6;
+            --primary-light: #7c4dff;
+            --bg-gradient: linear-gradient(135deg, #f5f3ff 0%, #ffffff 100%);
             --card: #ffffff;
-            --input-border: #e1e4e8;
+            --border: #e2e8f0;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg);
+            background: var(--bg-gradient);
+            background-attachment: fixed;
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 20px;
+            color: var(--text-main);
         }
 
-        .main-container {
+        .app-container {
             display: flex;
-            width: 1100px;
-            height: 800px;
+            width: 1150px;
+            height: 820px;
             background: var(--card);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border-radius: 30px;
+            box-shadow: 0 40px 100px -20px rgba(91, 43, 191, 0.15);
             overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
         }
 
-        .editor-pane {
-            width: 40%;
+        /* Sidebar Editor */
+        .editor-side {
+            width: 380px;
             padding: 40px;
-            border-right: 1px solid #f0f0f0;
+            border-right: 1px solid var(--border);
             overflow-y: auto;
+            background: rgba(255, 255, 255, 0.95);
         }
 
-        h2 { color: var(--primary); margin-bottom: 25px; font-weight: 600; }
+        .logo-header {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 30px;
+            color: var(--primary);
+            letter-spacing: -1px;
+        }
 
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase; margin-bottom: 5px; }
+        .section-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            margin: 30px 0 15px 0;
+            display: block;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+        }
+
+        .field { margin-bottom: 20px; }
         
+        label { 
+            display: block; 
+            font-size: 13px; 
+            font-weight: 600; 
+            margin-bottom: 8px;
+            color: #475569;
+        }
+
         input, select {
             width: 100%;
-            padding: 12px;
-            border: 1px solid var(--input-border);
-            border-radius: 8px;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
             font-size: 14px;
-            box-sizing: border-box;
+            background: #f8fafc;
+            transition: all 0.25s ease;
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary);
             background: #fff;
+            box-shadow: 0 0 0 4px rgba(91, 43, 191, 0.1);
         }
 
-        .phone-input-container {
-            display: flex;
-            gap: 5px;
-        }
+        .phone-row { display: flex; gap: 10px; }
+        .phone-row select { width: 120px; }
 
-        .phone-input-container select { width: 40%; }
-        .phone-input-container input { width: 60%; }
-
-        .preview-pane {
-            width: 60%;
-            background: #fafbfc;
+        /* Preview Area */
+        .preview-side {
+            flex: 1;
+            background: rgba(241, 245, 249, 0.5);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            padding: 40px;
         }
 
-        .signature-stage {
+        .signature-wrapper {
             background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-            min-width: 450px;
+            padding: 45px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            max-width: 580px;
+            width: 100%;
+            border: 1px solid #f1f5f9;
         }
 
-        .copy-btn {
-            margin-top: 30px;
+        .copy-button {
+            margin-top: 40px;
             background: var(--primary);
             color: white;
             border: none;
-            padding: 14px 28px;
-            border-radius: 30px;
-            font-weight: 600;
+            padding: 18px 40px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 16px;
             cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 25px -5px rgba(91, 43, 191, 0.4);
+        }
+
+        .copy-button:hover {
+            transform: scale(1.05);
+            background: var(--primary-light);
         }
 
         input[type="range"] {
-            accent-color: var(--primary);
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 5px;
+            appearance: none;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            border: 3px solid white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            border-radius: 50%;
         }
     </style>
 </head>
 <body>
 
-<div class="main-container">
-    <div class="editor-pane">
-        <h2>Editor</h2>
-        
-        <div class="form-group">
+<div class="app-container">
+    <div class="editor-side">
+        <div class="logo-header">Cevro Studio</div>
+
+        <span class="section-label">Identity</span>
+        <div class="field">
             <label>Full Name</label>
             <input type="text" id="name" placeholder="Full Name" oninput="generate()">
         </div>
-
-        <div class="form-group">
+        <div class="field">
             <label>Job Title</label>
             <input type="text" id="title" placeholder="Job Position" oninput="generate()">
         </div>
-
-        <div class="form-group">
+        <div class="field">
             <label>Phone Number</label>
-            <div class="phone-input-container">
-                <select id="prefix" onchange="generate()">
-                    <option value="+972">IL (+972)</option>
-                    <option value="+1">US (+1)</option>
-                    <option value="+44">UK (+44)</option>
-                    <option value="+33">FR (+33)</option>
-                    <option value="+49">DE (+49)</option>
-                </select>
-                <input type="text" id="phone" placeholder="50-123-4567" oninput="generate()">
+            <div class="phone-row">
+               <select id="prefix" onchange="generate()">
+    <option value="+43">AT (+43) - Austria</option>
+    <option value="+32">BE (+32) - Belgium</option>
+    <option value="+41">CH (+41) - Switzerland</option>
+    <option value="+420">CZ (+420) - Czech Republic</option>
+    <option value="+49">DE (+49) - Germany</option>
+    <option value="+45">DK (+45) - Denmark</option>
+    <option value="+34">ES (+34) - Spain</option>
+    <option value="+358">FI (+358) - Finland</option>
+    <option value="+33">FR (+33) - France</option>
+    <option value="+30">GR (+30) - Greece</option>
+    <option value="+36">HU (+36) - Hungary</option>
+    <option value="+353">IE (+353) - Ireland</option>
+    <option value="+972">IL (+972) - Israel</option>
+    <option value="+39">IT (+39) - Italy</option>
+    <option value="+31">NL (+31) - Netherlands</option>
+    <option value="+47">NO (+47) - Norway</option>
+    <option value="+48">PL (+48) - Poland</option>
+    <option value="+351">PT (+351) - Portugal</option>
+    <option value="+40">RO (+40) - Romania</option>
+    <option value="+381">RS (+381) - Serbia</option>
+    <option value="+46">SE (+46) - Sweden</option>
+    <option value="+44">UK (+44) - United Kingdom</option>
+    <option value="+1">US (+1) - USA</option>
+</select>
+                <input type="text" id="phone" placeholder="50 000 000" oninput="generate()">
             </div>
         </div>
 
-        <div class="form-group">
+        <span class="section-label">Connections</span>
+        <div class="field">
             <label>LinkedIn URL</label>
-            <input type="text" id="linkedin" placeholder="https://linkedin.com/in/..." oninput="generate()">
+            <input type="text" id="linkedin" placeholder="https://linkedin.com/..." oninput="generate()">
+        </div>
+        <div class="field">
+            <label>Meeting Link (Calendly)</label>
+            <input type="text" id="calendar" placeholder="Meeting link" oninput="generate()">
         </div>
 
-        <div class="form-group">
-            <label>Calendar Booking Link</label>
-            <input type="text" id="calendar" placeholder="https://calendly.com/..." oninput="generate()">
-        </div>
-
-        <div class="form-group">
-            <label>Logo Size (Width)</label>
-            <input type="range" id="logoWidth" min="50" max="200" value="90" oninput="generate()">
-        </div>
-
-        <div class="form-group">
+        <span class="section-label">Design</span>
+        <div class="field">
             <label>Accent Color</label>
             <select id="accentColor" onchange="generate()">
                 <option value="#5b2bbf">Cevro Purple</option>
-                <option value="#000000">Classic Black</option>
+                <option value="#000000">Deep Black</option>
             </select>
         </div>
-
-        <div class="form-group">
-            <label>Font Style</label>
-            <select id="fontFamily" onchange="generate()">
-                <option value="'Inter', sans-serif">Inter (Modern)</option>
-                <option value="'Playfair Display', serif">Playfair (Elegant)</option>
-                <option value="Arial, sans-serif">Arial (Standard)</option>
-            </select>
+        <div class="field">
+            <label>Logo Width (<span id="logoVal">90</span>px)</label>
+            <input type="range" id="logoWidth" min="40" max="180" value="90" oninput="generate()">
         </div>
     </div>
 
-    <div class="preview-pane">
-        <div id="signature-output" class="signature-stage"></div>
-        <button class="copy-btn" onclick="copyToClipboard()">Copy to Clipboard</button>
+    <div class="preview-side">
+        <div id="signature-output" class="signature-wrapper"></div>
+        <button class="copy-button" onclick="copyToClipboard()">Copy to Clipboard</button>
     </div>
 </div>
 
@@ -171,38 +240,47 @@
         const name = document.getElementById('name').value || "Full Name";
         const title = document.getElementById('title').value || "Job Position";
         const prefix = document.getElementById('prefix').value;
-        const phone = document.getElementById('phone').value || "00-000-0000";
-        const linkedin = document.getElementById('linkedin').value || "#";
-        const calendar = document.getElementById('calendar').value || "";
+        const phone = document.getElementById('phone').value || "00 000 0000";
+        const linkedin = document.getElementById('linkedin').value;
+        const calendar = document.getElementById('calendar').value;
         const logoWidth = document.getElementById('logoWidth').value;
-        const font = document.getElementById('fontFamily').value;
         const color = document.getElementById('accentColor').value;
         
-        const logoUrl = "https://raw.githubusercontent.com/lidor1997/cevro-signature-generator/06d880fec1752804a8f64b013d5c7382455fc7eb/1763362497422%20(1).png";
+        document.getElementById('logoVal').innerText = logoWidth;
 
-        const calendarHtml = calendar ? `
-            <div style="margin-top: 5px;">
-                <a href="${calendar}" style="background-color: ${color}; color: #ffffff; padding: 5px 10px; text-decoration: none; border-radius: 4px; font-size: 11px; font-weight: bold; display: inline-block;">📅 Book a Meeting</a>
+        // Correct Raw URL for GitHub
+        const logoUrl = "https://raw.githubusercontent.com/lidor1997/cevro-signature-generator/06d880fec1752804a8f64b013d5c7382455fc7eb/1763362497422%20(1).png";
+        
+        const linkedinIcon = linkedin ? `
+            <a href="${linkedin}" target="_blank" style="text-decoration:none; margin-left: 8px; display: inline-block; vertical-align: middle;">
+                <img src="https://cdn-icons-png.flaticon.com/32/174/174857.png" width="16" height="16" style="display:block; border:0;">
+            </a>` : '';
+
+        const calendarBtn = calendar ? `
+            <div style="margin-top: 15px;">
+                <a href="${calendar}" target="_blank" style="background-color: ${color}; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 8px; font-size: 13px; font-weight: 700; display: inline-block;">Schedule a Call</a>
             </div>` : '';
 
         const template = `
-            <table cellpadding="0" cellspacing="0" style="font-family: ${font}; color: #333333; line-height: 1.5; border-collapse: collapse;">
+            <table cellpadding="0" cellspacing="0" style="font-family: 'Inter', Helvetica, sans-serif; color: #1e293b; line-height: 1.5; border-collapse: collapse;">
                 <tr>
-                    <td style="padding-right: 20px; border-right: 2px solid ${color}; vertical-align: middle;">
-                        <img src="${logoUrl}" width="${logoWidth}" alt="Cevro Logo" style="display: block;">
+                    <td style="padding-right: 25px; border-right: 3px solid ${color}; vertical-align: middle;">
+                        <img src="${logoUrl}" width="${logoWidth}" alt="Logo" style="display: block; border:0;">
                     </td>
-                    <td style="padding-left: 20px; vertical-align: middle;">
-                        <div style="font-weight: 700; color: ${color}; font-size: 18px; margin-bottom: 2px;">${name}</div>
-                        <div style="color: #666666; font-weight: 500; font-size: 14px; margin-bottom: 8px;">${title}</div>
-                        <div style="font-size: 13px; color: #444;">
-                            <span style="color: ${color}; font-weight: bold;">T:</span> ${prefix} ${phone}
+                    <td style="padding-left: 25px; vertical-align: middle;">
+                        <div style="font-weight: 700; color: ${color}; font-size: 20px; letter-spacing: -0.5px; margin-bottom: 2px;">${name}</div>
+                        <div style="color: #64748b; font-weight: 500; font-size: 14px; margin-bottom: 12px;">${title}</div>
+                        
+                        <div style="font-size: 13px; color: #334155; margin-bottom: 5px;">
+                            <span style="color: ${color}; font-weight: 800; font-size: 11px;">M:</span> ${prefix} ${phone}
                         </div>
-                        <div style="font-size: 13px; margin-top: 4px;">
-                            <a href="https://www.cevro.ai" style="color: ${color}; text-decoration: none; font-weight: bold;">www.cevro.ai</a>
-                            <span style="margin: 0 8px; color: #ccc;">|</span>
-                            <a href="${linkedin}" style="color: ${color === '#000000' ? '#000000' : '#0077b5'}; text-decoration: none; font-weight: bold;">LinkedIn</a>
+                        
+                        <div style="font-size: 13px; display: flex; align-items: center;">
+                            <a href="https://www.cevro.ai" target="_blank" style="color: ${color}; text-decoration: none; font-weight: 700;">www.cevro.ai</a>
+                            ${linkedinIcon}
                         </div>
-                        ${calendarHtml}
+                        
+                        ${calendarBtn}
                     </td>
                 </tr>
             </table>
@@ -212,15 +290,16 @@
     }
 
     function copyToClipboard() {
+        const node = document.getElementById("signature-output");
         const range = document.createRange();
-        range.selectNode(document.getElementById("signature-output"));
+        range.selectNode(node);
         window.getSelection().removeAllRanges();
         window.getSelection().addRange(range);
         document.execCommand("copy");
-        alert("Signature copied!");
+        alert("Signature copied! Paste it into your email settings.");
     }
 
-    generate();
+    generate(); // Render on start
 </script>
 
 </body>
