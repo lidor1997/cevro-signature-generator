@@ -1,189 +1,199 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cevro Signature Generator</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Roboto:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <title>Cevro | Professional Signature Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@700&family=Roboto+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #5b2bbf;
-            --bg: #f8f9fa;
+            --bg: #f4f7f6;
             --card: #ffffff;
-            --text: #333;
+            --input-border: #e1e4e8;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background: var(--bg);
+            background-color: var(--bg);
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            height: 100vh;
         }
 
-        .container {
+        .main-container {
             display: flex;
-            width: 900px;
+            width: 1000px;
+            height: 600px;
             background: var(--card);
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             overflow: hidden;
-            border: 1px solid #eee;
         }
 
-        /* צד שמאל - טופס */
-        .form-section {
+        /* Left Side: Controls */
+        .editor-pane {
             width: 40%;
             padding: 40px;
-            border-left: 1px solid #eee;
+            border-right: 1px solid #f0f0f0;
+            overflow-y: auto;
         }
 
-        h2 { margin-top: 0; color: var(--primary); font-size: 24px; }
+        h2 { color: var(--primary); margin-bottom: 25px; font-weight: 600; }
 
-        .input-group { margin-bottom: 15px; }
-        label { display: block; font-size: 12px; margin-bottom: 5px; color: #666; font-weight: bold; }
-
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 12px; font-weight: 600; color: #888; text-transform: uppercase; margin-bottom: 5px; }
+        
         input, select {
             width: 100%;
             padding: 12px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--input-border);
             border-radius: 8px;
-            box-sizing: border-box;
             font-size: 14px;
-            transition: border 0.3s;
+            transition: all 0.2s;
         }
 
-        input:focus { border-color: var(--primary); outline: none; }
+        input:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(91, 43, 191, 0.1); }
 
-        /* צד ימין - תצוגה מקדימה */
-        .preview-section {
+        /* Right Side: Preview */
+        .preview-pane {
             width: 60%;
-            background: #fafafa;
+            background: #fafbfc;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            position: relative;
         }
 
-        .preview-label {
-            margin-bottom: 20px;
-            font-weight: bold;
-            color: #999;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        .preview-header {
+            position: absolute;
+            top: 20px;
             font-size: 12px;
+            color: #aaa;
+            letter-spacing: 1px;
+            font-weight: bold;
         }
 
-        .signature-card {
+        .signature-stage {
             background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            min-width: 400px;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            max-width: 90%;
         }
 
-        button.copy-btn {
-            margin-top: 20px;
+        .copy-btn {
+            margin-top: 30px;
             background: var(--primary);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
+            padding: 14px 28px;
+            border-radius: 30px;
+            font-weight: 600;
             cursor: pointer;
-            font-weight: bold;
+            transition: transform 0.2s;
         }
+
+        .copy-btn:hover { transform: translateY(-2px); opacity: 0.9; }
     </style>
 </head>
 <body>
 
-<div class="container" dir="ltr">
-    <div class="form-section">
-        <h2>Cevro Studio</h2>
-        <div class="input-group">
-            <label>Full Name</label>
-            <input id="name" placeholder="Lidor Kupershmid" oninput="update()">
+<div class="main-container">
+    <div class="editor-pane">
+        <h2>Editor</h2>
+        
+        <div class="form-group">
+            <label>Name</label>
+            <input type="text" id="name" placeholder="Lidor Kupershmid" oninput="generate()">
         </div>
-        <div class="input-group">
+
+        <div class="form-group">
             <label>Job Title</label>
-            <input id="title" placeholder="Software Engineer" oninput="update()">
+            <input type="text" id="title" placeholder="Creative Director" oninput="generate()">
         </div>
-        <div class="input-group">
+
+        <div class="form-group">
             <label>Phone</label>
-            <input id="phone" placeholder="+972-50-0000000" oninput="update()">
+            <input type="text" id="phone" placeholder="+972 50 123 4567" oninput="generate()">
         </div>
-        <div class="input-group">
-            <label>Font Family</label>
-            <select id="fontFamily" onchange="update()">
+
+        <div class="form-group">
+            <label>Font Style</label>
+            <select id="fontFamily" onchange="generate()">
                 <option value="'Inter', sans-serif">Inter (Modern)</option>
-                <option value="'Roboto', sans-serif">Roboto (Clean)</option>
                 <option value="'Playfair Display', serif">Playfair (Elegant)</option>
-                <option value="Arial, sans-serif">Arial (Classic)</option>
+                <option value="'Roboto Mono', monospace">Roboto Mono (Tech)</option>
+                <option value="Arial, sans-serif">Arial (Standard)</option>
             </select>
         </div>
-        <div class="input-group">
-            <label>Font Size</label>
-            <select id="fontSize" onchange="update()">
-                <option value="13px">Small</option>
-                <option value="15px" selected>Medium</option>
-                <option value="18px">Large</option>
+
+        <div class="form-group">
+            <label>Size</label>
+            <select id="size" onchange="generate()">
+                <option value="12px">Small</option>
+                <option value="14px" selected>Medium</option>
+                <option value="16px">Large</option>
             </select>
         </div>
     </div>
 
-    <div class="preview-section">
-        <div class="preview-label">Live Preview</div>
-        <div id="signature-container" class="signature-card">
+    <div class="preview-pane">
+        <div class="preview-header">LIVE SIGNATURE PREVIEW</div>
+        <div id="signature-output" class="signature-stage">
             </div>
-        <button class="copy-btn" onclick="copyToClipboard()">Copy Signature</button>
+        <button class="copy-btn" onclick="copyToClipboard()">Copy to Clipboard</button>
     </div>
 </div>
 
 <script>
-function update() {
-    const name = document.getElementById("name").value || "Your Name";
-    const title = document.getElementById("title").value || "Your Job Title";
-    const phone = document.getElementById("phone").value || "Your Phone";
-    const font = document.getElementById("fontFamily").value;
-    const size = document.getElementById("fontSize").value;
+    function generate() {
+        const name = document.getElementById('name').value || "Lidor Kupershmid";
+        const title = document.getElementById('title').value || "Your Position";
+        const phone = document.getElementById('phone').value || "+972 00 000 0000";
+        const font = document.getElementById('fontFamily').value;
+        const size = document.getElementById('size').value;
+        
+        // Correct Raw GitHub URL for the image
+        const logoUrl = "https://raw.githubusercontent.com/lidor1997/cevro-signature-generator/main/logo.png";
 
-    // לינק תקין ללוגו (Raw)
-    const logoUrl = "https://raw.githubusercontent.com/lidor1997/cevro-signature-generator/main/logo.png";
+        const template = `
+            <table cellpadding="0" cellspacing="0" style="font-family: ${font}; font-size: ${size}; color: #333333; line-height: 1.4;">
+                <tr>
+                    <td style="padding-right: 20px; border-right: 2px solid #5b2bbf; vertical-align: middle;">
+                        <img src="${logoUrl}" width="110" alt="Cevro Logo" style="display: block;">
+                    </td>
+                    <td style="padding-left: 20px; vertical-align: middle;">
+                        <div style="font-weight: 700; color: #5b2bbf; font-size: 1.2em; margin-bottom: 2px;">${name}</div>
+                        <div style="color: #666666; font-weight: 500; margin-bottom: 8px;">${title}</div>
+                        <div style="font-size: 0.9em; color: #888888;">
+                            <span style="color: #5b2bbf; font-weight: bold;">M:</span> ${phone}
+                        </div>
+                        <div style="font-size: 0.9em; margin-top: 2px;">
+                            <a href="https://cevro.studio" style="color: #5b2bbf; text-decoration: none; font-weight: bold;">www.cevro.studio</a>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        `;
 
-    const signatureHtml = `
-        <table style="font-family: ${font}; color: #333; line-height: 1.5; font-size: ${size};">
-            <tr>
-                <td style="vertical-align: top; padding-right: 15px; border-right: 2px solid #5b2bbf;">
-                    <img src="${logoUrl}" width="100" style="display: block; margin-bottom: 10px;" alt="Logo">
-                </td>
-                <td style="padding-left: 15px; vertical-align: middle;">
-                    <div style="font-weight: bold; color: #5b2bbf; font-size: calc(${size} + 2px);">${name}</div>
-                    <div style="color: #666;">${title}</div>
-                    <div style="margin-top: 5px; font-size: calc(${size} - 2px);">
-                        📞 ${phone} | 🌐 <a href="https://cevro.studio" style="color: #5b2bbf; text-decoration: none;">cevro.studio</a>
-                    </div>
-                </td>
-            </tr>
-        </table>
-    `;
+        document.getElementById('signature-output').innerHTML = template;
+    }
 
-    document.getElementById("signature-container").innerHTML = signatureHtml;
-}
+    function copyToClipboard() {
+        const range = document.createRange();
+        range.selectNode(document.getElementById("signature-output"));
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+        document.execCommand("copy");
+        alert("Signature copied! You can now paste it into your email settings.");
+    }
 
-function copyToClipboard() {
-    const el = document.getElementById("signature-container");
-    const range = document.createRange();
-    range.selectNode(el);
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(range);
-    document.execCommand("copy");
-    alert("החתימה הועתקה! עכשיו אפשר להדביק אותה בהגדרות המייל.");
-}
-
-// Initial call
-update();
+    // Initialize
+    generate();
 </script>
 
 </body>
