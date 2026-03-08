@@ -3,16 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cevro | Signature Studio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <title>Cevro | Pro Signature Studio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #5b2bbf;
             --bg-gradient: linear-gradient(135deg, #f5f3ff 0%, #ffffff 100%);
-            --card: #ffffff;
             --border: #e2e8f0;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
         }
 
         body {
@@ -30,7 +27,7 @@
             display: flex;
             width: 1200px;
             height: 850px;
-            background: var(--card);
+            background: #fff;
             border-radius: 30px;
             box-shadow: 0 40px 100px -20px rgba(91, 43, 191, 0.15);
             overflow: hidden;
@@ -42,14 +39,13 @@
             padding: 40px;
             border-right: 1px solid var(--border);
             overflow-y: auto;
-            background: rgba(255, 255, 255, 0.95);
         }
 
-        .logo-header { font-size: 24px; font-weight: 800; margin-bottom: 30px; color: var(--primary); letter-spacing: -1px; }
+        .logo-header { font-size: 24px; font-weight: 800; color: var(--primary); margin-bottom: 30px; }
 
         .section-label {
             font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
-            color: var(--text-muted); margin: 30px 0 15px 0; display: block; border-bottom: 1px solid var(--border); padding-bottom: 8px;
+            color: #64748b; margin: 30px 0 15px 0; display: block; border-bottom: 1px solid var(--border); padding-bottom: 8px;
         }
 
         .field { margin-bottom: 20px; }
@@ -57,13 +53,10 @@
 
         input, select {
             width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: 12px;
-            font-size: 14px; background: #f8fafc; transition: all 0.25s ease; outline: none;
+            font-size: 14px; background: #f8fafc; outline: none; transition: 0.2s;
         }
 
-        input:focus, select:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(91, 43, 191, 0.1); }
-
-        .phone-row { display: flex; gap: 10px; }
-        .phone-row select { width: 120px; }
+        input:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(91, 43, 191, 0.1); }
 
         .preview-side {
             flex: 1;
@@ -72,8 +65,6 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 40px;
-            transition: background 0.3s ease;
         }
 
         .preview-side.dark-mode { background: #1a1a1a; }
@@ -83,44 +74,54 @@
             padding: 45px;
             border-radius: 20px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.04);
-            max-width: 580px;
-            width: 100%;
-            border: 1px solid #f1f5f9;
         }
 
         .dark-mode .signature-wrapper { background: #242424; border-color: #333; }
 
         .controls { margin-top: 30px; display: flex; gap: 15px; }
 
-        .btn {
-            border: none; padding: 16px 32px; border-radius: 16px; font-weight: 700;
-            font-size: 15px; cursor: pointer; transition: all 0.3s ease;
-        }
-
-        .copy-button { background: var(--primary); color: white; box-shadow: 0 10px 25px -5px rgba(91, 43, 191, 0.4); }
-        .dark-mode-toggle { background: #475569; color: white; }
+        .btn { border: none; padding: 16px 32px; border-radius: 16px; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        .copy-button { background: var(--primary); color: white; }
+        .dark-toggle { background: #475569; color: white; }
 
         input[type="range"] { height: 6px; background: #e2e8f0; border-radius: 5px; appearance: none; cursor: pointer; width: 100%; }
-        input[type="range"]::-webkit-slider-thumb { appearance: none; width: 20px; height: 20px; background: var(--primary); border: 3px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.2); border-radius: 50%; }
+        input[type="range"]::-webkit-slider-thumb { appearance: none; width: 20px; height: 20px; background: var(--primary); border: 3px solid white; border-radius: 50%; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
     <div class="editor-side">
-        <div class="logo-header">Cevro Siganture Studio</div>
+        <div class="logo-header">Cevro Studio</div>
 
         <span class="section-label">Identity</span>
-        <div class="field"><label>Full Name</label><input type="text" id="name" placeholder="Enter name..." oninput="generate()"></div>
-        <div class="field"><label>Job Title</label><input type="text" id="title" placeholder="Enter title..." oninput="generate()"></div>
+        <div class="field"><label>Full Name</label><input type="text" id="name" placeholder="Full Name" oninput="generate()"></div>
+        <div class="field"><label>Job Title</label><input type="text" id="title" placeholder="Job Position" oninput="generate()"></div>
         <div class="field">
-            <label>Phone Number</label>
-            <div class="phone-row">
-                <select id="prefix" onchange="generate()">
+            <label>Phone</label>
+            <div style="display:flex; gap:10px;">
+                <select id="prefix" onchange="generate()" style="width:115px;">
                     <option value="+43">AT (+43)</option>
+                    <option value="+32">BE (+32)</option>
+                    <option value="+41">CH (+41)</option>
+                    <option value="+420">CZ (+420)</option>
                     <option value="+49">DE (+49)</option>
+                    <option value="+45">DK (+45)</option>
+                    <option value="+34">ES (+34)</option>
+                    <option value="+358">FI (+358)</option>
+                    <option value="+33">FR (+33)</option>
+                    <option value="+30">GR (+30)</option>
+                    <option value="+36">HU (+36)</option>
+                    <option value="+353">IE (+353)</option>
                     <option value="+972" selected>IL (+972)</option>
+                    <option value="+39">IT (+39)</option>
+                    <option value="+31">NL (+31)</option>
+                    <option value="+47">NO (+47)</option>
+                    <option value="+48">PL (+48)</option>
+                    <option value="+351">PT (+351)</option>
+                    <option value="+40">RO (+40)</option>
                     <option value="+381">RS (+381)</option>
+                    <option value="+46">SE (+46)</option>
                     <option value="+44">UK (+44)</option>
                     <option value="+1">US (+1)</option>
                 </select>
@@ -132,15 +133,13 @@
         <div class="field"><label>LinkedIn URL</label><input type="text" id="linkedin" placeholder="LinkedIn link" oninput="generate()"></div>
         <div class="field"><label>Meeting Link</label><input type="text" id="calendar" placeholder="Calendly link" oninput="generate()"></div>
 
-        <span class="section-label">Design</span>
+        <span class="section-label">Design & Proportional Scale</span>
         <div class="field">
             <label>Font Family</label>
             <select id="fontFamily" onchange="generate()">
                 <option value="'Inter', sans-serif">Inter (Modern)</option>
-                <option value="'Calibri', Candara, Segoe, Optima, Arial, sans-serif">Calibri (Classic)</option>
-                <option value="'Roboto', sans-serif">Roboto</option>
-                <option value="'Open Sans', sans-serif">Open Sans</option>
-                <option value="Georgia, serif">Georgia (Elegant)</option>
+                <option value="'Calibri', 'Candara', sans-serif">Calibri (Classic)</option>
+                <option value="Arial, sans-serif">Arial</option>
             </select>
         </div>
         <div class="field">
@@ -151,8 +150,8 @@
             </select>
         </div>
         <div class="field">
-            <label>Logo Width (<span id="logoVal">100</span>px)</label>
-            <input type="range" id="logoWidth" min="40" max="180" value="100" oninput="generate()">
+            <label>Overall Size Scale: <span id="scaleVal">100</span>%</label>
+            <input type="range" id="globalScale" min="60" max="150" value="100" oninput="generate()">
         </div>
     </div>
 
@@ -160,7 +159,7 @@
         <div id="signature-output" class="signature-wrapper"></div>
         <div class="controls">
             <button class="btn copy-button" onclick="copyToClipboard()">Copy to Clipboard</button>
-            <button class="btn dark-mode-toggle" onclick="toggleDarkMode()">Dark Mode Preview</button>
+            <button class="btn dark-toggle" onclick="toggleDarkMode()">Dark Mode Preview</button>
         </div>
     </div>
 </div>
@@ -169,49 +168,54 @@
     function generate() {
         const name = document.getElementById('name').value || "Full Name";
         const title = document.getElementById('title').value || "Job Position";
-        const phoneInput = document.getElementById('phone').value;
+        const phone = document.getElementById('phone').value;
         const prefix = document.getElementById('prefix').value;
         const linkedin = document.getElementById('linkedin').value;
         const calendar = document.getElementById('calendar').value;
-        const logoWidth = document.getElementById('logoWidth').value;
         const color = document.getElementById('accentColor').value;
         const font = document.getElementById('fontFamily').value;
         
-        document.getElementById('logoVal').innerText = logoWidth;
+        const scale = document.getElementById('globalScale').value / 100;
+        document.getElementById('scaleVal').innerText = Math.round(scale * 100);
+
+        const logoWidth = 90 * scale;
+        const nameSize = 20 * scale;
+        const titleSize = 14 * scale;
+        const textSize = 13 * scale;
+
         const logoUrl = "https://raw.githubusercontent.com/lidor1997/cevro-signature-generator/06d880fec1752804a8f64b013d5c7382455fc7eb/1763362497422%20(1).png";
         
-        const phoneHtml = phoneInput ? `
-            <div style="font-size: 13px; color: #334155; margin-bottom: 5px;">
-                <span style="color: ${color}; font-weight: 800; font-size: 11px; margin-right: 4px;">M:</span> ${prefix} ${phoneInput}
+        const phoneRow = phone ? `
+            <div style="font-size: ${textSize}px; color: #334155; margin-bottom: ${4 * scale}px;">
+                <span style="color: ${color}; font-weight: 800; font-size: ${textSize - 2}px;">M:</span> ${prefix} ${phone}
             </div>` : '';
 
         const linkedinIcon = linkedin ? `
-            <a href="${linkedin}" target="_blank" style="text-decoration:none; margin-left: 8px; display: inline-block; vertical-align: middle;">
-                <img src="https://cdn-icons-png.flaticon.com/32/174/174857.png" width="16" height="16" style="display:block; border:0; pointer-events: none;">
+            <a href="${linkedin}" target="_blank" style="text-decoration:none; margin-left: ${8 * scale}px; display: inline-block; vertical-align: middle;">
+                <img src="https://cdn-icons-png.flaticon.com/32/174/174857.png" width="${16 * scale}" height="${16 * scale}" style="display:block; border:0; pointer-events: none;">
             </a>` : '';
 
-        // Website link with slightly increased letter spacing and semi-bold weight for better aesthetics
         const webAndSocial = `
-            <div style="font-size: 13px; display: flex; align-items: center; margin-top: 4px;">
+            <div style="font-size: ${textSize}px; display: flex; align-items: center; margin-top: ${4 * scale}px;">
                 <a href="https://www.cevro.ai" target="_blank" style="color: ${color}; text-decoration: none; font-weight: 600; letter-spacing: 0.3px;">www.cevro.ai</a>
                 ${linkedinIcon}
             </div>`;
 
         const calendarBtn = calendar ? `
-            <div style="margin-top: 15px;">
-                <a href="${calendar}" target="_blank" style="background-color: ${color}; color: #ffffff; padding: 8px 18px; text-decoration: none; border-radius: 6px; font-size: 12px; font-weight: 700; display: inline-block;">Schedule a Call</a>
+            <div style="margin-top: ${15 * scale}px;">
+                <a href="${calendar}" target="_blank" style="background-color: ${color}; color: #ffffff; padding: ${8 * scale}px ${18 * scale}px; text-decoration: none; border-radius: ${6 * scale}px; font-size: ${textSize - 1}px; font-weight: 700; display: inline-block;">Schedule a Call</a>
             </div>` : '';
 
         const template = `
             <table cellpadding="0" cellspacing="0" style="font-family: ${font}; border-collapse: collapse;">
                 <tr>
-                    <td style="padding-right: 25px; border-right: 2px solid ${color}; vertical-align: middle;">
-                        <img src="${logoUrl}" width="${logoWidth}" alt="Cevro" style="display: block; border: 0; pointer-events: none; -webkit-user-drag: none;">
+                    <td style="padding-right: ${25 * scale}px; border-right: ${2 * scale}px solid ${color}; vertical-align: middle;">
+                        <img src="${logoUrl}" width="${logoWidth}" alt="Logo" style="display: block; border: 0; pointer-events: none; -webkit-user-drag: none;">
                     </td>
-                    <td style="padding-left: 25px; vertical-align: middle; white-space: nowrap;">
-                        <div style="font-weight: 700; color: #000000; font-size: 20px; line-height: 1.2; margin-bottom: 2px;">${name}</div>
-                        <div style="color: #64748b; font-weight: 500; font-size: 14px; margin-bottom: 12px;">${title}</div>
-                        ${phoneHtml}
+                    <td style="padding-left: ${25 * scale}px; vertical-align: middle; white-space: nowrap;">
+                        <div style="font-weight: 700; color: #000; font-size: ${nameSize}px; line-height: 1.2; margin-bottom: ${2 * scale}px;">${name}</div>
+                        <div style="color: #64748b; font-weight: 500; font-size: ${titleSize}px; margin-bottom: ${12 * scale}px;">${title}</div>
+                        ${phoneRow}
                         ${webAndSocial}
                         ${calendarBtn}
                     </td>
@@ -226,7 +230,7 @@
         const pane = document.getElementById('previewPane');
         pane.classList.toggle('dark-mode');
         const isDark = pane.classList.contains('dark-mode');
-        document.querySelector('.dark-mode-toggle').innerText = isDark ? "Light Mode Preview" : "Dark Mode Preview";
+        document.querySelector('.dark-toggle').innerText = isDark ? "Light Mode Preview" : "Dark Mode Preview";
     }
 
     function copyToClipboard() {
@@ -236,7 +240,7 @@
         window.getSelection().removeAllRanges();
         window.getSelection().addRange(range);
         document.execCommand("copy");
-        alert("Signature copied! You can now paste it into your email settings.");
+        alert("Signature copied!");
     }
 
     generate();
