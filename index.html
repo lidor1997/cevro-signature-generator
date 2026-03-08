@@ -20,13 +20,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
+            padding: 20px;
         }
 
         .main-container {
             display: flex;
-            width: 1000px;
-            height: 700px;
+            width: 1100px;
+            height: 800px;
             background: var(--card);
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
@@ -55,7 +56,13 @@
             background: #fff;
         }
 
-        input:focus { border-color: var(--primary); outline: none; }
+        .phone-input-container {
+            display: flex;
+            gap: 5px;
+        }
+
+        .phone-input-container select { width: 40%; }
+        .phone-input-container input { width: 60%; }
 
         .preview-pane {
             width: 60%;
@@ -83,10 +90,11 @@
             border-radius: 30px;
             font-weight: 600;
             cursor: pointer;
-            transition: opacity 0.2s;
         }
 
-        .copy-btn:hover { opacity: 0.9; }
+        input[type="range"] {
+            accent-color: var(--primary);
+        }
     </style>
 </head>
 <body>
@@ -107,12 +115,31 @@
 
         <div class="form-group">
             <label>Phone Number</label>
-            <input type="text" id="phone" placeholder="+0 000 000 0000" oninput="generate()">
+            <div class="phone-input-container">
+                <select id="prefix" onchange="generate()">
+                    <option value="+972">IL (+972)</option>
+                    <option value="+1">US (+1)</option>
+                    <option value="+44">UK (+44)</option>
+                    <option value="+33">FR (+33)</option>
+                    <option value="+49">DE (+49)</option>
+                </select>
+                <input type="text" id="phone" placeholder="50-123-4567" oninput="generate()">
+            </div>
         </div>
 
         <div class="form-group">
             <label>LinkedIn URL</label>
             <input type="text" id="linkedin" placeholder="https://linkedin.com/in/..." oninput="generate()">
+        </div>
+
+        <div class="form-group">
+            <label>Calendar Booking Link</label>
+            <input type="text" id="calendar" placeholder="https://calendly.com/..." oninput="generate()">
+        </div>
+
+        <div class="form-group">
+            <label>Logo Size (Width)</label>
+            <input type="range" id="logoWidth" min="50" max="200" value="90" oninput="generate()">
         </div>
 
         <div class="form-group">
@@ -131,15 +158,6 @@
                 <option value="Arial, sans-serif">Arial (Standard)</option>
             </select>
         </div>
-
-        <div class="form-group">
-            <label>Text Size</label>
-            <select id="size" onchange="generate()">
-                <option value="13px">Small</option>
-                <option value="15px" selected>Medium</option>
-                <option value="17px">Large</option>
-            </select>
-        </div>
     </div>
 
     <div class="preview-pane">
@@ -152,32 +170,39 @@
     function generate() {
         const name = document.getElementById('name').value || "Full Name";
         const title = document.getElementById('title').value || "Job Position";
-        const phone = document.getElementById('phone').value || "+0 000 000 0000";
+        const prefix = document.getElementById('prefix').value;
+        const phone = document.getElementById('phone').value || "00-000-0000";
         const linkedin = document.getElementById('linkedin').value || "#";
+        const calendar = document.getElementById('calendar').value || "";
+        const logoWidth = document.getElementById('logoWidth').value;
         const font = document.getElementById('fontFamily').value;
-        const size = document.getElementById('size').value;
         const color = document.getElementById('accentColor').value;
         
-        // Direct Raw link to ensure the logo loads for everyone
         const logoUrl = "https://raw.githubusercontent.com/lidor1997/cevro-signature-generator/06d880fec1752804a8f64b013d5c7382455fc7eb/1763362497422%20(1).png";
 
+        const calendarHtml = calendar ? `
+            <div style="margin-top: 5px;">
+                <a href="${calendar}" style="background-color: ${color}; color: #ffffff; padding: 5px 10px; text-decoration: none; border-radius: 4px; font-size: 11px; font-weight: bold; display: inline-block;">📅 Book a Meeting</a>
+            </div>` : '';
+
         const template = `
-            <table cellpadding="0" cellspacing="0" style="font-family: ${font}; font-size: ${size}; color: #333333; line-height: 1.5; border-collapse: collapse;">
+            <table cellpadding="0" cellspacing="0" style="font-family: ${font}; color: #333333; line-height: 1.5; border-collapse: collapse;">
                 <tr>
                     <td style="padding-right: 20px; border-right: 2px solid ${color}; vertical-align: middle;">
-                        <img src="${logoUrl}" width="90" alt="Cevro Logo" style="display: block;">
+                        <img src="${logoUrl}" width="${logoWidth}" alt="Cevro Logo" style="display: block;">
                     </td>
                     <td style="padding-left: 20px; vertical-align: middle;">
-                        <div style="font-weight: 700; color: ${color}; font-size: 1.2em; margin-bottom: 2px;">${name}</div>
-                        <div style="color: #666666; font-weight: 500; margin-bottom: 8px;">${title}</div>
-                        <div style="font-size: 0.9em; color: #444;">
-                            <span style="color: ${color}; font-weight: bold;">T:</span> ${phone}
+                        <div style="font-weight: 700; color: ${color}; font-size: 18px; margin-bottom: 2px;">${name}</div>
+                        <div style="color: #666666; font-weight: 500; font-size: 14px; margin-bottom: 8px;">${title}</div>
+                        <div style="font-size: 13px; color: #444;">
+                            <span style="color: ${color}; font-weight: bold;">T:</span> ${prefix} ${phone}
                         </div>
-                        <div style="font-size: 0.9em; margin-top: 4px;">
+                        <div style="font-size: 13px; margin-top: 4px;">
                             <a href="https://www.cevro.ai" style="color: ${color}; text-decoration: none; font-weight: bold;">www.cevro.ai</a>
                             <span style="margin: 0 8px; color: #ccc;">|</span>
                             <a href="${linkedin}" style="color: ${color === '#000000' ? '#000000' : '#0077b5'}; text-decoration: none; font-weight: bold;">LinkedIn</a>
                         </div>
+                        ${calendarHtml}
                     </td>
                 </tr>
             </table>
@@ -192,10 +217,9 @@
         window.getSelection().removeAllRanges();
         window.getSelection().addRange(range);
         document.execCommand("copy");
-        alert("Signature copied! You can now paste it into your email settings.");
+        alert("Signature copied!");
     }
 
-    // Initialize the preview
     generate();
 </script>
 
