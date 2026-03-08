@@ -79,6 +79,7 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.04);
             max-width: 600px;
             width: fit-content;
+            /* Preview matching the internal gradient */
             background: linear-gradient(135deg, #fdfaff 0%, #ffffff 100%);
         }
 
@@ -203,7 +204,7 @@
         document.getElementById('scaleVal').innerText = Math.round(scale * 100);
 
         const logoWidth = 145 * scale; 
-        const nameSize = 21 * scale; // Slightly bumped for better presence
+        const nameSize = 20 * scale;
         const titleSize = 14 * scale;
         const textSize = 13 * scale;
         const padding = 25 * scale;
@@ -211,7 +212,7 @@
         const logoUrl = "https://raw.githubusercontent.com/lidor1997/cevro-signature-generator/06d880fec1752804a8f64b013d5c7382455fc7eb/1763362497422%20(1).png";
         
         const phoneHtml = phone ? `
-            <tr><td style="padding-bottom: ${4 * scale}px; font-family: Arial, Helvetica, sans-serif; font-size: ${textSize}px; color: #334155; border: none !important;">
+            <tr><td style="padding-bottom: ${4 * scale}px; font-family: sans-serif; font-size: ${textSize}px; color: #334155; border: none !important;">
                 <span style="color: ${color}; font-weight: 800; font-size: ${textSize - 2}px; margin-right: 4px;">M:</span> ${prefix} ${phone}
             </td></tr>` : '';
 
@@ -225,24 +226,20 @@
                 <a href="${calendar}" target="_blank" style="background-color: ${color}; color: #ffffff; padding: ${8 * scale}px ${18 * scale}px; text-decoration: none; border-radius: 6px; font-size: ${textSize - 1}px; font-weight: 700; display: inline-block;">Schedule a Call</a>
             </td></tr>` : '';
 
-        // Table logic with background gradient and specific iPhone font fixes
+        // Table logic with background gradient and strict border resets to kill ghost lines
         const template = `
             <table cellpadding="0" cellspacing="0" border="0" style="vertical-align: middle; border-collapse: collapse !important; background: linear-gradient(135deg, #fdfaff 0%, #ffffff 100%); background-color: #ffffff; border: none !important; margin: 0; padding: 0;">
                 <tbody><tr style="border: none !important;">
-                    <td style="padding: ${padding}px ${padding}px ${padding}px 0; border-right: 2.3px solid ${color} !important; vertical-align: middle; border-top: none !important; border-bottom: none !important; border-left: none !important;">
+                    <td style="padding: ${padding}px ${padding}px ${padding}px 0; border-right: 2px solid ${color} !important; vertical-align: middle; border-top: none !important; border-bottom: none !important; border-left: none !important;">
                         <img src="${logoUrl}" width="${logoWidth}" alt="Cevro" style="display: block; border: 0; pointer-events: none;">
                     </td>
                     <td style="padding: ${padding}px 0 ${padding}px ${padding}px; vertical-align: middle; white-space: nowrap; border: none !important;">
                         <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse !important; border: none !important; margin: 0; padding: 0;">
                             <tbody>
-                                <tr style="border: none !important;">
-                                    <td style="font-family: Arial, Helvetica, sans-serif; font-weight: 700; color: #000000; font-size: ${nameSize}px; line-height: 1.2; padding-bottom: 2px; border: none !important;">${name}</td>
-                                </tr>
-                                <tr style="border: none !important;">
-                                    <td style="font-family: Arial, Helvetica, sans-serif; color: #64748b; font-weight: 500; font-size: ${titleSize}px; padding-bottom: ${12 * scale}px; border: none !important;">${title}</td>
-                                </tr>
+                                <tr style="border: none !important;"><td style="font-family: sans-serif; font-weight: 700; color: #000000; font-size: ${nameSize}px; line-height: 1.2; padding-bottom: 2px; border: none !important;">${name}</td></tr>
+                                <tr style="border: none !important;"><td style="font-family: sans-serif; color: #64748b; font-weight: 500; font-size: ${titleSize}px; padding-bottom: ${12 * scale}px; border: none !important;">${title}</td></tr>
                                 ${phoneHtml}
-                                <tr style="border: none !important;"><td style="padding-top: ${4 * scale}px; font-family: Arial, Helvetica, sans-serif; font-size: ${textSize}px; border: none !important;">
+                                <tr style="border: none !important;"><td style="padding-top: ${4 * scale}px; font-family: sans-serif; font-size: ${textSize}px; border: none !important;">
                                     <a href="https://www.cevro.ai" target="_blank" style="color: ${color}; text-decoration: none; font-weight: 700;">www.cevro.ai</a>
                                     ${linkedinIcon}
                                 </td></tr>
