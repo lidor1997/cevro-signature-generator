@@ -11,34 +11,43 @@
 
 body{
 font-family:Arial;
-padding:40px;
-background:#f3f3f3;
+background:#f5f5f5;
+margin:0;
 }
 
-.box{
+.wrapper{
+display:flex;
+height:100vh;
+}
+
+.form{
+width:40%;
 background:white;
-padding:30px;
-width:500px;
-border-radius:8px;
+padding:40px;
+box-shadow:2px 0px 10px rgba(0,0,0,0.1);
+}
+
+.preview{
+width:60%;
+display:flex;
+align-items:center;
+justify-content:center;
 }
 
 input{
-display:block;
 width:100%;
 padding:10px;
 margin-bottom:10px;
 }
 
-button{
-background:#5b2bbf;
-color:white;
-padding:12px;
-border:none;
-cursor:pointer;
+h2{
+margin-top:0;
 }
 
-#signature{
-margin-top:30px;
+.signature-box{
+background:white;
+padding:20px;
+border:1px solid #ddd;
 }
 
 </style>
@@ -47,56 +56,55 @@ margin-top:30px;
 
 <body>
 
-<div class="box">
+<div class="wrapper">
 
-<h2>Cevro Email Signature Generator</h2>
+<div class="form">
 
-<input id="name" placeholder="Full Name">
+<h2>Cevro Signature</h2>
 
-<input id="title" placeholder="Job Title">
+<input id="name" placeholder="Full Name" oninput="generate()">
 
-<input id="phone" placeholder="Phone">
+<input id="title" placeholder="Job Title" oninput="generate()">
 
-<input id="linkedin" placeholder="LinkedIn URL">
+<input id="phone" placeholder="Phone" oninput="generate()">
 
-<input id="calendar" placeholder="Calendar link">
+<input id="linkedin" placeholder="LinkedIn URL" oninput="generate()">
 
-<button onclick="generate()">Generate Signature</button>
-
-<div id="signature"></div>
+<input id="calendar" placeholder="Calendar link" oninput="generate()">
 
 </div>
+
+
+<div class="preview">
+
+<div class="signature-box" id="signature"></div>
+
+</div>
+
+</div>
+
 
 <script>
 
 function generate(){
 
 const name=document.getElementById("name").value
-
 const title=document.getElementById("title").value
-
 const phone=document.getElementById("phone").value
-
 const linkedin=document.getElementById("linkedin").value
-
 const calendar=document.getElementById("calendar").value
 
-document.getElementById("signature").innerHTML = `
+document.getElementById("signature").innerHTML=`
 
 <table style="font-family:Arial;font-size:14px">
 
 <tr>
-
 <td colspan="2">
-
 <a href="${calendar}">Book a call</a>
-
 </td>
-
 </tr>
 
 <tr>
-
 <td colspan="2" style="padding-top:10px">
 
 <strong>${name}</strong> | ${title}<br>
@@ -108,14 +116,13 @@ m: ${phone}<br>
 <a href="${linkedin}">${name} LinkedIn</a>
 
 </td>
-
 </tr>
 
 <tr>
 
-<td style="padding-top:15px">
+<td style="padding-top:10px">
 
-<img src="https://github.com/lidor1997/cevro-signature-generator/blob/6f0630a4b21224d49919e9b5ba947664af9f0b29/1763362497422%20(1).png" width="120">
+<img src="https://raw.githubusercontent.com/lidor1997/cevro-signature-generator/main/logo.png" width="120">
 
 </td>
 
@@ -126,6 +133,8 @@ m: ${phone}<br>
 `
 
 }
+
+generate()
 
 </script>
 
