@@ -123,7 +123,7 @@
                     <option value="+381">RS (+381)</option>
                     <option value="+46">SE (+46)</option>
                     <option value="+44">UK (+44)</option>
-                    <option value="+1">US selected(+1)</option>
+                    <option value="+1" selected>US (+1)</option>
                 </select>
                 <input type="text" id="phone" placeholder="50 000 000" oninput="generate()">
             </div>
@@ -178,7 +178,8 @@
         const scale = document.getElementById('globalScale').value / 100;
         document.getElementById('scaleVal').innerText = Math.round(scale * 100);
 
-        const logoWidth = 90 * scale;
+        // INCREASED BASE LOGO SIZE from 90 to 120
+        const logoWidth = 120 * scale; 
         const nameSize = 20 * scale;
         const titleSize = 14 * scale;
         const textSize = 13 * scale;
